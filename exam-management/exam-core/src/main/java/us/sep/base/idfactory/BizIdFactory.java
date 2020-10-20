@@ -93,4 +93,20 @@ public interface BizIdFactory {
      * @return
      */
     String getExamLocationId();
+
+
+    /**
+     * 生成用户报名考试id
+     *
+     * @return
+     */
+    String getUserExamEntry();
+
+    /**
+     * 生成用户报名考试归档id
+     *
+     * @return
+     */
+    String getUserExamEntryRecord();
+
 }

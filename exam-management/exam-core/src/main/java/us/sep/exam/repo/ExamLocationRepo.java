@@ -22,4 +22,10 @@ public interface ExamLocationRepo extends JpaRepository<ExamLocationDO,Long> {
 
     ExamLocationDO deleteByExamLocationId(String examLocationId);
 
+    boolean existsByExamDetailId(String examDetailId);
+
+    boolean existsByUserId(String userId);
+
+    boolean existsByExamLocationId(String examLocationId);
+
 }

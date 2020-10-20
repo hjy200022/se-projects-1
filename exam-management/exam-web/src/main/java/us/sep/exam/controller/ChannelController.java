@@ -44,7 +44,7 @@ public class ChannelController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),channelService.createChannel(request));
     }
 
-    @AvoidRepeatableCommit
+
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -53,7 +53,7 @@ public class ChannelController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), channelService.updateChannel(request));
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

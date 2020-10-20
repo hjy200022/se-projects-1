@@ -25,19 +25,19 @@ public class ExamEntryBlackListDO extends AbstractAuditBase {
     private String examDetailId;
 
     //黑名单id
-    @Column(length = 32, updatable = false)
+    @Column(nullable = false ,length = 32, updatable = false)
     private String examBlacklistId;
 
     /**
      * 关联报名信息id
      */
-    @Column(length = 32, updatable = false)
+    @Column(nullable = false ,length = 32, updatable = false)
     private String examEntryId;
 
     /**
      * 用户id
      */
-    @Column(length = 32, nullable = false)
+    @Column(length = 32, nullable = false, updatable = false)
     private String userId;
 
     /**

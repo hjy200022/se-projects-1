@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
 public class ExamDetailServiceImpl implements ExamDetailService {
 
     @Resource
-    ExamDetailRepo examDetailRepo;
+    private  ExamDetailRepo examDetailRepo;
 
     @Resource
-    BizIdFactory bizIdFactory;
+    private BizIdFactory bizIdFactory;
 
     @Transactional(rollbackFor = Exception.class)
     @Override

@@ -43,12 +43,12 @@ public enum IdTypeEnum {
     /**
      * 生成考试报名id
      */
-    User_Entry_Exam_ID("1008","考试报名id"),
+    Entry_Exam_ID("1008","考试报名id"),
 
     /**
      * 生成考试报名归档id
      */
-    User_Entry_Exam_Record_ID("1009","考试报名归档id"),
+    Entry_Exam_Record_ID("1009","考试报名归档id"),
 
     /**
      * 生成考试报名黑名单id
@@ -58,7 +58,17 @@ public enum IdTypeEnum {
     /**
      * 生成用户考试座位id
      */
-    Exam_Location_ID("1011","用户考试座位id")
+    Exam_Location_ID("1011","用户考试座位id"),
+
+    /**
+     * 生成学生报名id
+     */
+    User_Entry_Exam_ID("1012","用户考试报名id"),
+
+    /**
+     * 生成学生报名归档id
+     */
+    User_Entry_Exam_Record_ID("1013","用户报名归档id"),
 
     ;
 

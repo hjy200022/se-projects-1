@@ -61,7 +61,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.createExamScore(request));
     }
 
-    @AvoidRepeatableCommit
+
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -70,7 +70,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.updateExamScore(request));
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -80,7 +80,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreId);
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -90,7 +90,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userId);
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping("/examDetail")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

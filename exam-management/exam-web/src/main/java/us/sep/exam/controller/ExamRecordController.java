@@ -4,7 +4,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import us.sep.biz.exam.request.ExamRecordRequest;
 import us.sep.biz.exam.service.ExamRecordService;
-import us.sep.common.annotion.AvoidRepeatableCommit;
 import us.sep.common.annotion.LoggerName;
 import us.sep.exam.builder.ExamRecordBO;
 import us.sep.util.common.Result;
@@ -32,7 +31,7 @@ public class ExamRecordController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.findExamRecordData(request,pageNum,pageSize));
     }
 
-    @AvoidRepeatableCommit
+
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -41,7 +40,7 @@ public class ExamRecordController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.modifyExamRecord(request));
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -50,7 +49,7 @@ public class ExamRecordController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.deleteExamRecord(examRecordId));
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping("/examType")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

@@ -67,7 +67,6 @@ public class UserInfoController {
 
     }
 
-    @AvoidRepeatableCommit
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -83,7 +82,6 @@ public class UserInfoController {
 
     }
 
-    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

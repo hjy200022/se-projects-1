@@ -21,7 +21,7 @@ public class ExamScoreDO extends AbstractAuditBase {
     private Long id;
 
     //单类考试具体信息id
-    @Column(nullable = false , length = 32)
+    @Column(nullable = false , length = 32, updatable = false)
     private String examDetailId;
 
     //考试分数

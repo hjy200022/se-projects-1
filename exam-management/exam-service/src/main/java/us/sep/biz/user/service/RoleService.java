@@ -55,14 +55,12 @@ public class RoleService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public Role find(RoleCreateRequest request){
        Optional<Role> role = roleRepo.findByName(request.getName());
        return role.orElse(null);
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     public List<Role> getAllRole(){
         return roleRepo.findAll();
     }
@@ -75,7 +73,6 @@ public class RoleService {
         roleRepo.deleteByName(request.getName());
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public Boolean IsManagerOrAdmin(String username){
         Optional<User> userOptional = userRepo.findByUserName(username);
         if(userOptional.isPresent()) {

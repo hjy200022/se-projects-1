@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 public class MessageServiceImpl implements MessageService {
 
     @Resource
-    MessageRepo messageRepo;
+    private  MessageRepo messageRepo;
     @Resource
-    ExamTypeRepo examTypeRepo;
+    private  ExamTypeRepo examTypeRepo;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -48,7 +48,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<MessageBO> find(MessageRequest request, int pageNum, int pageSize) {
         MessageDO message = new MessageDO();
 

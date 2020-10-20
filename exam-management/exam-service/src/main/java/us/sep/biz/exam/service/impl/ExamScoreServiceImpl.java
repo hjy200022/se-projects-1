@@ -30,22 +30,21 @@ import java.util.stream.Collectors;
 public class ExamScoreServiceImpl implements ExamScoreService {
 
     @Resource
-    ExamScoreRepo examScoreRepo;
+    private ExamScoreRepo examScoreRepo;
 
     @Resource
-    ExamDetailRepo examDetailRepo;
+    private  ExamDetailRepo examDetailRepo;
 
     @Resource
-    UserRepo userRepo;
+    private UserRepo userRepo;
 
     @Resource
-    UserInfoRepo userInfoRepo;
+    private  UserInfoRepo userInfoRepo;
 
     @Resource
-    BizIdFactory bizIdFactory;
+    private BizIdFactory bizIdFactory;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<ExamScoreBO> findByCondition(ExamScoreRequest request, int pageNum, int pageSize) {
 
         if (!StringUtils.isEmpty(request.getExamScoreId())){

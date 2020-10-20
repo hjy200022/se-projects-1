@@ -12,9 +12,9 @@ public interface ExamEntryRepo extends JpaRepository<ExamEntryDO,Long> {
 
     List<ExamEntryDO> findByTerm(String term);
 
-    List<ExamEntryDO> findByUserId(String userId);
-
     List<ExamEntryDO> findByExamDetailId(String examDetailId);
+
+    List<ExamEntryDO> findByState(String state);
 
     Optional<ExamEntryDO> findByExamEntryId(String examEntryId);
 
@@ -22,6 +22,5 @@ public interface ExamEntryRepo extends JpaRepository<ExamEntryDO,Long> {
 
     ExamEntryDO deleteByExamEntryId(String examEntryId);
 
-    ExamEntryDO deleteByUserId(String userId);
 
 }

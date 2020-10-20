@@ -33,7 +33,6 @@ public class UserRoleController {
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
 
-    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

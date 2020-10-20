@@ -4,6 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import us.sep.biz.user.request.RoleCreateRequest;
 import us.sep.biz.user.service.RoleService;
+import us.sep.common.annotion.AvoidRepeatableCommit;
 import us.sep.common.annotion.LoggerName;
 import us.sep.user.entity.Role;
 import us.sep.util.common.Result;
@@ -29,6 +30,7 @@ public class RoleController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),roles);
     }
 
+    @AvoidRepeatableCommit
     @PostMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
@@ -37,6 +39,7 @@ public class RoleController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
 
+    @AvoidRepeatableCommit
     @PutMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
@@ -45,6 +48,7 @@ public class RoleController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")

@@ -133,7 +133,6 @@ public class UserController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),allUser.getContent());
     }
 
-    @AvoidRepeatableCommit
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MANAGER')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -142,7 +141,6 @@ public class UserController {
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userUpdateRequest);
     }
 
-    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -151,7 +149,7 @@ public class UserController {
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),username);
     }
 
-    @AvoidRepeatableCommit
+
     @DeleteMapping("/deleteInBatch")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

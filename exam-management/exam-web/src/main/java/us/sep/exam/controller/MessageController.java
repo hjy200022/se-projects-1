@@ -60,7 +60,6 @@ public class MessageController {
      * @param request
      * @return
      */
-    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

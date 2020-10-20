@@ -49,7 +49,6 @@ public class UserService {
     @Resource
     private  BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Transactional(rollbackFor = Exception.class)
     public List<UserRoleBO> getUserRole(String userName){
         User user = null;
        Optional<User> userOptional = userRepo.findByUserName(userName);
@@ -151,7 +150,7 @@ public class UserService {
     public Page<UserBO> getAll(int pageNum, int pageSize) {
         return userRepo.findAll(PageRequest.of(pageNum, pageSize)).map(User::toUserBO);
     }
-    @Transactional(rollbackFor = Exception.class)
+
     public UserBO getUser(String username) {
         Optional<User> optional = userRepo.findByUserName(username);
         if (!optional.isPresent())
@@ -159,12 +158,13 @@ public class UserService {
 
         return optional.get().toUserBO();
     }
-    @Transactional(rollbackFor = Exception.class)
+
+
     public Long getCount() {
         return userRepo.count();
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public Boolean ifManagerOrAdmin(String username){
        if (!userRepo.existsByUserName(username))
            return false;

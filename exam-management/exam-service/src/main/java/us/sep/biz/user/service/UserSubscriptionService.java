@@ -82,25 +82,25 @@ public class UserSubscriptionService {
             userSubscriptionRepo.deleteAllByChannelId(channelId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<UserSubscriptionBO> findAll(int pageNum ,int pageSize){
         return userSubscriptionRepo.findAll(PageRequest.of(pageNum,pageSize)).stream()
                 .map(UserSubscriptionDO::ToUserSubBO).collect(Collectors.toList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<UserSubscriptionBO> findByUserId(String userId,int pageNum ,int pageSize){
         return userSubscriptionRepo.findByUserId(userId,PageRequest.of(pageNum,pageSize)).getContent().stream()
                 .map(UserSubscriptionDO::ToUserSubBO).collect(Collectors.toList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<UserSubscriptionBO> findByChannelId(String channelId,int pageNum ,int pageSize){
         return userSubscriptionRepo.findByChannelId(channelId,PageRequest.of(pageNum,pageSize)).getContent().stream()
                 .map(UserSubscriptionDO::ToUserSubBO).collect(Collectors.toList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public boolean ifUserSubExist(UserSubRequest request){
         return userSubscriptionRepo.existsByUserIdAndChannelId(request.getUserId(), request.getChannelId());
     }

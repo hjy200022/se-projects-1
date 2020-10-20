@@ -78,8 +78,8 @@ public class UserInfoService {
             }
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户");
         }
+
         //通过用户名查找
-        @Transactional(rollbackFor = Exception.class)
         public UserInfoBO findByName(String username){
         Optional<User> userDO = userRepo.findByUserName(username);
         if (userDO.isPresent()) {
@@ -98,7 +98,6 @@ public class UserInfoService {
 
 
        //通过userid查找
-       @Transactional(rollbackFor = Exception.class)
         public UserInfoBO findById(String userid){
         Optional<UserInfoDO> userInfo = userInfoRepo.findByUserId(userid);
        if (userInfo.isPresent()) {

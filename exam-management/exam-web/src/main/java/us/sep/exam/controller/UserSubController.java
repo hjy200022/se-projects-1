@@ -82,7 +82,6 @@ public class UserSubController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), "用户已经订阅过该频道");
     }
 
-   @AvoidRepeatableCommit
    @DeleteMapping("/single")
    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
    @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -93,7 +92,6 @@ public class UserSubController {
        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request.getUserChannelId());
    }
 
-    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

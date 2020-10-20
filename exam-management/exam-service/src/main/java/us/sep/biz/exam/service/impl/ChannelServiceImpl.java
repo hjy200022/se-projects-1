@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
 public class ChannelServiceImpl implements ChannelService {
 
     @Resource
-    ChannelRepo channelRepo;
+    private ChannelRepo channelRepo;
 
     @Resource
-    BizIdFactory bizIdFactory;
+    private BizIdFactory bizIdFactory;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -47,7 +47,7 @@ public class ChannelServiceImpl implements ChannelService {
         throw new CustomizeException(CommonResultCode.ILLEGAL_PARAMETERS , "该类型频道已经存在");
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     @Override
     public List<ChannelBO> getChannel(ChannelRequest request, int pageNum, int pageSize) {
 

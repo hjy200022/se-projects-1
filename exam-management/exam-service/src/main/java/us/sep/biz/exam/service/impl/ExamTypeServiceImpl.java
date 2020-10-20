@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
 public class ExamTypeServiceImpl implements ExamTypeService {
 
     @Resource
-    ExamTypeRepo examTypeRepo;
+    private  ExamTypeRepo examTypeRepo;
 
     @Resource
-    CheckExamTypeUtil checkExamTypeUtil;
+    private CheckExamTypeUtil checkExamTypeUtil;
 
     @Resource
-    BizIdFactory bizIdFactory;
+    private BizIdFactory bizIdFactory;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -84,7 +84,6 @@ public class ExamTypeServiceImpl implements ExamTypeService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<ExamTypeBO> find(ExamTypeRequest request, int pageNum, int pageSize) {
 
         ExamTypeDO examTypeDO = new ExamTypeDO();

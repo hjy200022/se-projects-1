@@ -25,10 +25,9 @@ import java.util.stream.Collectors;
 public class ExamRecordServiceImpl implements ExamRecordService {
 
     @Resource
-    ExamRecordRepo examRecordRepo;
+    private  ExamRecordRepo examRecordRepo;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<ExamRecordBO> findExamRecordData(ExamRecordRequest request, int pageNum, int pageSize) {
         ExamRecordDO examRecordDO = new ExamRecordDO();
 

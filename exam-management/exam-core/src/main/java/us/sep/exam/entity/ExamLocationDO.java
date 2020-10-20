@@ -21,7 +21,7 @@ public class ExamLocationDO extends AbstractAuditBase {
     private Long id;
 
     //单类考试具体信息id
-    @Column(nullable = false , length = 32)
+    @Column(nullable = false , length = 32, updatable = false)
     private String examDetailId;
 
     //考试座位id
@@ -33,7 +33,7 @@ public class ExamLocationDO extends AbstractAuditBase {
     private String location;
 
     //考生(用户)id
-    @Column(nullable = false , length = 32)
+    @Column(nullable = false , length = 32, updatable = false)
     private String userId;
 
     //监考老师名称
