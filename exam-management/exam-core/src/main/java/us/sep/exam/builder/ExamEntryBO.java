@@ -18,10 +18,6 @@ public class ExamEntryBO{
      */
     private String examEntryId;
 
-    /**
-     * 报名用户id
-     */
-    private String userId;
 
     /**
      * 单类考试具体信息id

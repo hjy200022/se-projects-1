@@ -28,16 +28,6 @@ public class ExamEntryRecordBO extends AbstractAuditBase {
     private String examEntryId;
 
     /**
-     * 用户id
-     */
-    private String userId;
-
-    /**
-     * 是否参加
-     */
-    private Boolean isAttend;
-
-    /**
      * 记录状态
      */
     private String state;

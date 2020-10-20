@@ -35,11 +35,6 @@ public class ExamEntryDO extends AbstractAuditBase {
     @Column(nullable = false , length = 32, updatable = false)
     private String examEntryId;
 
-    /**
-     * 报名用户id
-     */
-    @Column(nullable = false , length = 32, updatable = false)
-    private String userId;
 
     /**
      * 单类考试具体信息id
@@ -66,7 +61,7 @@ public class ExamEntryDO extends AbstractAuditBase {
     private Integer number;
 
     /**
-     * 联系方式
+     * 考方联系方式
      */
     @Column(nullable = false , length = 32)
     private String contact;
@@ -78,7 +73,7 @@ public class ExamEntryDO extends AbstractAuditBase {
     private String note;
 
     public ExamEntryBO ToExamEntryBO(){
-       return ExamEntryBO.builder().examEntryId(examEntryId).userId(userId).examDetailId(examDetailId).term(term)
+       return ExamEntryBO.builder().examEntryId(examEntryId).examDetailId(examDetailId).term(term)
                 .state(state).number(number).contact(contact).note(note).build();
     }
 
