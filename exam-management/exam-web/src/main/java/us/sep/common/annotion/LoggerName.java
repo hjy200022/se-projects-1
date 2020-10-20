@@ -2,7 +2,7 @@
   betahouse.us
   CopyRight (c) 2012 - 2018
  */
-package us.sep.common.log;
+package us.sep.common.annotion;
 
 /**
  * 日志名称

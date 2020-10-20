@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import us.sep.biz.user.request.UserInfoRequest;
 import us.sep.biz.user.service.RoleService;
 import us.sep.biz.user.service.UserInfoService;
-import us.sep.common.log.LoggerName;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
 import us.sep.security.utils.CurrentUserUtils;
 import us.sep.user.builder.UserInfoBO;
 import us.sep.util.common.Result;
@@ -53,6 +54,7 @@ public class UserInfoController {
         return new Result<>(false, CommonResultCode.UNFOUNDED.getCode(), CommonResultCode.UNFOUNDED.getMessage());
     }
 
+    @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -65,6 +67,7 @@ public class UserInfoController {
 
     }
 
+    @AvoidRepeatableCommit
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -80,6 +83,7 @@ public class UserInfoController {
 
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

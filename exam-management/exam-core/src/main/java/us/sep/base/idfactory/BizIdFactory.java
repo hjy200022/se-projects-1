@@ -86,4 +86,11 @@ public interface BizIdFactory {
      * @return
      */
     String getUserChannelId();
+
+    /**
+     * 生成用户考试座位id
+     *
+     * @return
+     */
+    String getExamLocationId();
 }

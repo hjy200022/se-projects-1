@@ -4,7 +4,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import us.sep.biz.exam.request.ExamScoreRequest;
 import us.sep.biz.exam.service.ExamScoreService;
-import us.sep.common.log.LoggerName;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
 import us.sep.exam.builder.ExamScoreBO;
 import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;
@@ -52,6 +53,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.findByExamDetailId(examDetailId));
     }
 
+    @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -59,6 +61,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.createExamScore(request));
     }
 
+    @AvoidRepeatableCommit
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -67,6 +70,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.updateExamScore(request));
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -76,6 +80,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreId);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -85,6 +90,7 @@ public class ExamScoreController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userId);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping("/examDetail")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

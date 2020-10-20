@@ -4,7 +4,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import us.sep.biz.exam.request.ExamDetailRequest;
 import us.sep.biz.exam.service.ExamDetailService;
-import us.sep.common.log.LoggerName;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
 import us.sep.exam.builder.ExamDetailBO;
 import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;
@@ -30,6 +31,8 @@ public class ExamDetailController {
                                                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examDetailService.find(request,pageNum,pageSize));
     }
+
+    @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -37,6 +40,7 @@ public class ExamDetailController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examDetailService.save(request));
     }
 
+    @AvoidRepeatableCommit
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -46,6 +50,7 @@ public class ExamDetailController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -54,6 +59,7 @@ public class ExamDetailController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examDetailId);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping("/examType")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

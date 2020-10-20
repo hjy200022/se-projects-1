@@ -53,7 +53,12 @@ public enum IdTypeEnum {
     /**
      * 生成考试报名黑名单id
      */
-    User_Entry_Exam_BlackList_ID("1010","考试报名黑名单id")
+    User_Entry_Exam_BlackList_ID("1010","考试报名黑名单id"),
+
+    /**
+     * 生成用户考试座位id
+     */
+    Exam_Location_ID("1011","用户考试座位id")
 
     ;
 

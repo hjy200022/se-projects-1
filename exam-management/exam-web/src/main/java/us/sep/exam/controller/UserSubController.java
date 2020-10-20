@@ -5,7 +5,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import us.sep.biz.user.request.UserSubRequest;
 import us.sep.biz.user.service.UserSubscriptionService;
-import us.sep.common.log.LoggerName;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
 import us.sep.message.builder.MessageBO;
 import us.sep.message.builder.UserSubscriptionBO;
 import us.sep.util.common.Result;
@@ -70,6 +71,7 @@ public class UserSubController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userSubscriptionService.getChannelMessage(userId));
     }
 
+    @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -80,6 +82,7 @@ public class UserSubController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), "用户已经订阅过该频道");
     }
 
+   @AvoidRepeatableCommit
    @DeleteMapping("/single")
    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
    @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -90,6 +93,7 @@ public class UserSubController {
        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request.getUserChannelId());
    }
 
+    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

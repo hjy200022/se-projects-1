@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import us.sep.biz.log.request.LogRequest;
 import us.sep.biz.log.service.LogService;
-import us.sep.common.log.LoggerName;
+import us.sep.common.annotion.LoggerName;
 import us.sep.log.builder.LogBO;
 import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;

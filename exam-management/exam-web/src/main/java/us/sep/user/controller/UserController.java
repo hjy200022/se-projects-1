@@ -12,8 +12,9 @@ import us.sep.biz.log.service.LogService;
 import us.sep.biz.user.request.UserRegisterRequest;
 import us.sep.biz.user.request.UserUpdateRequest;
 import us.sep.biz.user.service.UserService;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
 import us.sep.common.ipUtil;
-import us.sep.common.log.LoggerName;
 import us.sep.user.builder.UserBO;
 import us.sep.user.builder.UserRoleBO;
 import us.sep.util.common.Result;
@@ -46,6 +47,7 @@ public class UserController {
     @Resource
     private LogService logService;
 
+    @AvoidRepeatableCommit
     @PostMapping("/sign-up")
     public Result<UserRegisterRequest> signUp(@RequestBody @Valid UserRegisterRequest userRegisterRequest , HttpServletRequest request) {
         long start = System.currentTimeMillis();
@@ -69,6 +71,8 @@ public class UserController {
 
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userRegisterRequest);
     }
+
+    @AvoidRepeatableCommit
     @PostMapping("/manager")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     public Result<UserRegisterRequest> createManager(@RequestBody @Valid UserRegisterRequest userRegisterRequest , HttpServletRequest request) {
@@ -103,6 +107,7 @@ public class UserController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),number);
     }
 
+
     @GetMapping("/role")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -128,6 +133,7 @@ public class UserController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),allUser.getContent());
     }
 
+    @AvoidRepeatableCommit
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MANAGER')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -136,6 +142,7 @@ public class UserController {
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userUpdateRequest);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -144,6 +151,7 @@ public class UserController {
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),username);
     }
 
+    @AvoidRepeatableCommit
     @DeleteMapping("/deleteInBatch")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @Log(loggerName = LoggerName.WEB_DIGEST)

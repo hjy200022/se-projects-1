@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import us.sep.biz.exam.request.MessageRequest;
 import us.sep.biz.exam.service.MessageService;
 import us.sep.biz.exam.CheckExamTypeUtil;
-import us.sep.common.log.LoggerName;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
 import us.sep.message.builder.MessageBO;
 import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;
@@ -41,6 +42,7 @@ public class MessageController {
 
     }
 
+    @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
@@ -58,6 +60,7 @@ public class MessageController {
      * @param request
      * @return
      */
+    @AvoidRepeatableCommit
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
