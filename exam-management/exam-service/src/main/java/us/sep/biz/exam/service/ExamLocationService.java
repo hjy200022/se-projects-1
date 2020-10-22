@@ -23,7 +23,7 @@ public interface ExamLocationService {
 
     ExamLocationBO deleteByExamLocationId(String examLocationId);
 
-    ExamLocationBO deleteByExamDetailId(String examDetailId);
+    List<ExamLocationBO> deleteByExamDetailId(String examDetailId);
 
-    ExamLocationBO deleteByUserId(String userId);
+    List<ExamLocationBO> deleteByUserId(String userId);
 }

@@ -1,0 +1,84 @@
+package us.sep.exam.controller;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import us.sep.biz.exam.request.ExamEntryRequest;
+import us.sep.biz.exam.service.ExamEntryService;
+import us.sep.common.annotion.AvoidRepeatableCommit;
+import us.sep.common.annotion.LoggerName;
+import us.sep.exam.builder.ExamEntryBO;
+import us.sep.util.common.Result;
+import us.sep.util.enums.CommonResultCode;
+import us.sep.util.log.Log;
+import us.sep.util.utils.AssertUtil;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.List;
+
+@CrossOrigin
+@RestController
+@RequestMapping("/examEntry")
+public class ExamEntryController {
+
+    @Resource
+    ExamEntryService examEntryService;
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamEntryBO> getExamEntry(String examEntryId){
+        AssertUtil.assertStringNotBlank(examEntryId,"考试报名信息id不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.getExamEntry(examEntryId));
+    }
+
+    @GetMapping("/term")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<List<ExamEntryBO>> getExamEntryByTerm(String term){
+        AssertUtil.assertStringNotBlank(term,"学期信息不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.getExamEntryByTerm(term));
+    }
+
+    @GetMapping("/examDetail")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamEntryBO> getExamEntryByExamDetail(String examDetailId){
+        AssertUtil.assertStringNotBlank(examDetailId,"学期信息不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.getExamEntryByExamDetail(examDetailId));
+    }
+
+    @AvoidRepeatableCommit
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamEntryBO> createExamEntry(@Valid ExamEntryRequest request){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.createExamEntry(request));
+    }
+
+
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamEntryBO> modifyExamEntry(@Valid ExamEntryRequest request){
+        AssertUtil.assertStringNotBlank(request.getExamEntryId(),"考试报名信息id不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.modifyExamEntry(request));
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamEntryBO> deleteExamEntry(String examEntryId){
+        AssertUtil.assertStringNotBlank(examEntryId,"考试报名信息id不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.deleteExamEntry(examEntryId));
+    }
+
+    @DeleteMapping("/examDetail")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamEntryBO> deleteExamEntryByExamDetail(String examDetailId){
+        AssertUtil.assertStringNotBlank(examDetailId,"考试信息id不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.deleteExamEntryByExamDetail(examDetailId));
+    }
+
+}

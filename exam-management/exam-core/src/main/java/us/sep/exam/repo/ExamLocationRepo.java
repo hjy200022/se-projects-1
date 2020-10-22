@@ -16,9 +16,9 @@ public interface ExamLocationRepo extends JpaRepository<ExamLocationDO,Long> {
 
     Optional<ExamLocationDO> findByExamLocationId(String examLocationId);
 
-    ExamLocationDO deleteByUserId(String userId);
+    void deleteByUserId(String userId);
 
-    ExamLocationDO deleteByExamDetailId(String examDetailId);
+    void deleteByExamDetailId(String examDetailId);
 
     ExamLocationDO deleteByExamLocationId(String examLocationId);
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import us.sep.base.AbstractAuditBase;
+import us.sep.exam.builder.UserExamEntryBO;
 
 import javax.persistence.*;
 
@@ -40,6 +41,9 @@ public class UserExamEntryDO extends AbstractAuditBase {
     private String userId;
 
 
+    public UserExamEntryBO ToUserExamEntryBO(){
+        return UserExamEntryBO.builder().examEntryId(examEntryId).userExamEntryId(userExamEntryId).userId(userId).build();
+    }
 
 
 }

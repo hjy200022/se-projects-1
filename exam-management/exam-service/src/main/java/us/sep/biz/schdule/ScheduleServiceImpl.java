@@ -8,14 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import us.sep.base.idfactory.BizIdFactory;
-import us.sep.exam.entity.ExamDetailDO;
-import us.sep.exam.entity.ExamEntryDO;
-import us.sep.exam.entity.ExamEntryRecordDO;
-import us.sep.exam.entity.ExamRecordDO;
-import us.sep.exam.repo.ExamDetailRepo;
-import us.sep.exam.repo.ExamEntryRecordRepo;
-import us.sep.exam.repo.ExamEntryRepo;
-import us.sep.exam.repo.ExamRecordRepo;
+import us.sep.exam.entity.*;
+import us.sep.exam.repo.*;
 import us.sep.util.utils.CollectionUtils;
 import us.sep.util.utils.DateUtil;
 import us.sep.util.utils.LoggerUtil;
@@ -37,13 +31,13 @@ public class ScheduleServiceImpl implements  ScheduleService {
     private final Logger LOGGER = LoggerFactory.getLogger(ScheduleServiceImpl.class);
 
     @Resource
+    private BizIdFactory bizIdFactory;
+
+    @Resource
     private ExamDetailRepo examDetailRepo;
 
     @Resource
     private ExamRecordRepo examRecordRepo;
-
-    @Resource
-    private BizIdFactory bizIdFactory;
 
     @Resource
     private ExamEntryRepo examEntryRepo;
@@ -51,6 +45,11 @@ public class ScheduleServiceImpl implements  ScheduleService {
     @Resource
     private ExamEntryRecordRepo examEntryRecordRepo;
 
+    @Resource
+    private UserExamEntryRecordRepo userExamEntryRecordRepo;
+
+    @Resource
+    private UserExamEntryRepo userExamEntryRepo;
 
 
     @Override
@@ -106,7 +105,27 @@ public class ScheduleServiceImpl implements  ScheduleService {
         //help GC
         dealExamEntryList = null;
 
-        //todo 报名用户归档
+        List<UserExamEntryDO> userExamEntrys = new ArrayList<>();
+        for (String examEntryId:examEntryIds) {
+            userExamEntrys.addAll(userExamEntryRepo.findByExamEntryId(examEntryId));
+        }
+
+        //help GC
+        examEntryIds = null;
+
+        for (UserExamEntryDO userExamEntryDO:userExamEntrys) {
+            UserExamEntryRecordDO userExamEntryRecord = new UserExamEntryRecordDO();
+            BeanUtils.copyProperties(userExamEntryDO,userExamEntryRecord);
+            userExamEntryRecord.setUserExamEntryRecordId(bizIdFactory.getUserExamEntryRecord());
+            userExamEntryRecordRepo.save(userExamEntryRecord);
+
+            //help GC
+            userExamEntryDO = null;
+        }
+        userExamEntryRepo.deleteInBatch(userExamEntrys);
+
+        //help GC
+        userExamEntrys = null;
 
 
     }

@@ -14,6 +14,7 @@ import us.sep.exam.builder.ExamLocationBO;
 import us.sep.exam.entity.ExamLocationDO;
 import us.sep.exam.repo.ExamDetailRepo;
 import us.sep.exam.repo.ExamLocationRepo;
+import us.sep.user.repo.UserInfoRepo;
 import us.sep.user.repo.UserRepo;
 import us.sep.util.enums.CommonResultCode;
 import us.sep.util.exceptions.CustomizeException;
@@ -34,6 +35,9 @@ public class ExamLocationServiceImpl implements ExamLocationService {
 
     @Resource
     private UserRepo userRepo;
+
+    @Resource
+    private UserInfoRepo userInfoRepo;
 
     @Resource
     private BizIdFactory bizIdFactory;
@@ -112,6 +116,9 @@ public class ExamLocationServiceImpl implements ExamLocationService {
         if (!userRepo.existsByUserId(request.getUserId()))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户");
 
+        if (!userInfoRepo.existsByUserId(request.getUserId()))
+            throw new CustomizeException(CommonResultCode.UNFOUNDED,"该用户未录入学生信息");
+
         ExamLocationDO examLocationDO = new ExamLocationDO();
         BeanUtils.copyProperties(request,examLocationDO);
         examLocationDO.setExamLocationId(bizIdFactory.getExamLocationId());
@@ -149,24 +156,28 @@ public class ExamLocationServiceImpl implements ExamLocationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExamLocationBO deleteByExamDetailId(String examDetailId) {
+    public List<ExamLocationBO> deleteByExamDetailId(String examDetailId) {
 
         if (!examDetailRepo.existsByExamDetailId(examDetailId) )
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该次考试");
         if (!examLocationRepo.existsByExamDetailId(examDetailId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"该次考试尚未录入座位");
-
-        return examLocationRepo.deleteByExamDetailId(examDetailId).ToExamLocationBO();
+        List<ExamLocationBO> examLocationList = examLocationRepo.findByExamDetailId(examDetailId)
+                .stream().map(ExamLocationDO::ToExamLocationBO).collect(Collectors.toList());;
+        examLocationRepo.deleteByExamDetailId(examDetailId);
+        return examLocationList;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExamLocationBO deleteByUserId(String userId) {
+    public List<ExamLocationBO> deleteByUserId(String userId) {
         if (!userRepo.existsByUserId(userId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户");
         if (!examLocationRepo.existsByUserId(userId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"尚未录入该用户座位");
-
-        return examLocationRepo.deleteByUserId(userId).ToExamLocationBO();
+        List<ExamLocationBO> examLocationList = examLocationRepo.findByUserId(userId)
+                .stream().map(ExamLocationDO::ToExamLocationBO).collect(Collectors.toList());;
+        examLocationRepo.deleteByUserId(userId);
+        return examLocationList;
     }
 }

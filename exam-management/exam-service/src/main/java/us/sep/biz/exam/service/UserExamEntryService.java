@@ -1,0 +1,25 @@
+package us.sep.biz.exam.service;
+
+import us.sep.biz.exam.request.UserExamEntryRequest;
+import us.sep.exam.builder.UserExamEntryBO;
+
+import java.util.List;
+
+public interface UserExamEntryService {
+
+    List<UserExamEntryBO> getUserEntryByExamEntryId(String examEntryId);
+
+    List<UserExamEntryBO> getUserEntryByUserId(String userId);
+
+    UserExamEntryBO getUserEntryById(String userEntryId);
+
+    UserExamEntryBO createUserEntry(UserExamEntryRequest request);
+
+    List<UserExamEntryBO> deleteUserEntryByExamEntry(String examEntryId);
+
+    List<UserExamEntryBO> deleteUserEntryByUserId(String userId);
+
+    UserExamEntryBO deleteUserEntryById(String userEntryId);
+
+
+}

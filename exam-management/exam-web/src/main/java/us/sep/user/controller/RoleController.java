@@ -11,6 +11,7 @@ import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
 
+import javax.validation.Valid;
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class RoleController {
     @PostMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
-    public Result<RoleCreateRequest> CreateRole(RoleCreateRequest request){
+    public Result<RoleCreateRequest> CreateRole(@Valid RoleCreateRequest request){
         roleService.save(request);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
