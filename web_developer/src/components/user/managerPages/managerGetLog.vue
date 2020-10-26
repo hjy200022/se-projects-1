@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="dialogFormVisible = true">详细查询日志</el-button>
+    <el-button @click="dialogFormVisible = true" plain>详细查询日志</el-button>
     <el-dialog
       title="检索条件页面"
       :visible.sync="dialogFormVisible"
@@ -54,23 +54,40 @@
       :row-class-name="tableRowClassName"
       v-loading="loading"
     >
-      <el-table-column type="index" width="100"></el-table-column>
-      <el-table-column prop="ip" label="ip" width="180"></el-table-column>
-      <el-table-column prop="name" label="操作者" width="300"></el-table-column>
+      <el-table-column
+        type="index"
+        width="100"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="ip"
+        label="ip"
+        width="180"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="name"
+        label="操作者"
+        width="300"
+        align="center"
+      ></el-table-column>
       <el-table-column
         prop="action"
         label="请求接口"
         width="250"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="time"
         label="请求时间"
         width="180"
+        align="center"
       ></el-table-column>
       <el-table-column
         prop="message"
         label="请求结果"
         width="300"
+        align="center"
       ></el-table-column>
     </el-table>
     <el-pagination
@@ -80,6 +97,7 @@
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pagesize"
       background
+      align="center"
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageTotal"
     >
@@ -195,7 +213,6 @@ export default {
         url: "http://kana.chat:70/log/condition",
       }).then(
         function (reponse) {
-          console.log(reponse.data.data.length);
           that.log = reponse.data.data;
           that.pageTotal = reponse.data.data.length;
           that.dialogFormVisible = false;

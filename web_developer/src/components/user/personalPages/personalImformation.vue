@@ -214,6 +214,10 @@ export default {
     },
 
     updateInformation: function () {
+      //身份证正则表达式
+      var identificationNumberCheck = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+      //学号正则表达式
+      var stuNoCheck = /^[0-9]{9}$/;
       var that = this;
       if (this.print.Authorization == "") {
         this.$message.error("登陆失效，请重新登陆");
@@ -226,7 +230,20 @@ export default {
         this.u_className == this.className &&
         this.u_identificationNumber == this.identificationNumber
       ) {
-        this.$message.error('更改失败');
+        this.$message({
+          message: "更改失败，没有需要更改的内容",
+          type: "warning",
+        });
+      } else if (!identificationNumberCheck.test(this.u_identificationNumber)) {
+        this.$message({
+          message: "身份证格式错误",
+          type: "warning",
+        });
+      } else if (!stuNoCheck.test(this.u_stuNo)) {
+        this.$message({
+          message: "学号格式错误",
+          type: "warning",
+        });
       } else {
         //判断是录入还是更新
         //只要有一个空值就是录入
@@ -270,7 +287,7 @@ export default {
               that.$router.go(0);
             },
             function (err) {
-              that.$message.error('更改失败');
+              that.$message.error("更改失败");
             }
           );
         } else {
@@ -305,7 +322,7 @@ export default {
               that.$router.go(0);
             },
             function (err) {
-              that.$message.error('更改失败');
+              that.$message.error("更改失败");
             }
           );
         }

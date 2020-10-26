@@ -4,7 +4,7 @@
       class="navbar navbar-expand-lg navbar-light fixed-top"
       style="background-color: #e3f2fd"
     >
-      <a class="navbar-brand" href="#">考试管理</a>
+      <router-link class="navbar-brand" to="">考试管理</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <router-link class="nav-link" to="/"
+            <router-link class="nav-link" to="/homepage"
               >主页 <span class="sr-only">(current)</span></router-link
             >
           </li>
@@ -38,7 +38,9 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">报名中心</a>
-              <a class="dropdown-item" href="#">Another action</a>
+              <router-link class="dropdown-item" to="/publicGetTest"
+                >考试频道</router-link
+              >
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
@@ -95,7 +97,7 @@
       </div>
     </nav>
     <div class="to-text-center">
-      <router-link to="test">to test elementui page</router-link><br />
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -114,10 +116,14 @@ export default {
   computed: {
     ...mapState({
       print: (state) => state.print.all,
+      userId: (state) => state.userId.all,
     }),
   },
   mounted: function () {
     this.getUserName();
+  },
+  created: function () {
+    this.setState();
   },
   methods: {
     showDrop: function () {
@@ -148,10 +154,34 @@ export default {
       }
     },
 
+    setState: function () {
+      var that = this;
+      //获取存放userid
+      axios({
+        headers: {
+          Authorization: this.print.Authorization,
+        },
+        method: "get",
+        url: "http://kana.chat:70/users/single?username=" + this.print.username,
+      }).then(
+        function (reponse) {
+          that.$store.commit("userId/setUserId", {
+            userId: reponse.data.data.userId,
+          });
+        },
+        function (err) {
+          console.log(err);
+        }
+      );
+    },
+
     logout: function () {
       this.$store.commit("print/setPrint", {
         Authorization: "",
         username: "",
+      });
+      this.$router.push({
+        name: "homepage",
       });
       this.$router.go(0);
     },

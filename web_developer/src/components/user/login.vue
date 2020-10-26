@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <router-link class="nav-link" to="/"
+            <router-link class="nav-link" to="/homepage"
               >主页 <span class="sr-only">(current)</span></router-link
             >
           </li>
@@ -38,7 +38,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">报名中心</a>
-              <a class="dropdown-item" href="#">Another action</a>
+              <router-link class="dropdown-item" to="/publicGetTest">考试频道</router-link>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
@@ -51,21 +51,16 @@
       <form action="">
         <div class="form-group">
           <label for="username">用户名：</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="username"
-            placeholder="请输入用户名"
-          />
+          <el-input type="text" v-model="username" placeholder="请输入用户名" />
         </div>
         <div class="form-group">
           <label for="password">密码：</label>
-          <input
+          <el-input
             type="password"
-            class="form-control"
             v-model="password"
             placeholder="请输入密码"
-            @keyup.enter="login"
+            @keyup.enter="visible = !visible"
+            show-password
           />
         </div>
         <div class="form-group form-check">
@@ -162,7 +157,10 @@ export default {
     login: function () {
       var that = this;
       if (this.username == "" || this.password == "") {
-        this.$message.error("用户名或密码未输入");
+        this.$message({
+          message: "用户名或密码未输入",
+          type: "warning",
+        });
       } else {
         let login_data = {
           username: this.username,
@@ -182,11 +180,11 @@ export default {
               type: "success",
             });
             that.$router.push({
-              name: "HelloWorld",
+              name: "homepage",
             });
           },
           function (err) {
-            this.$message.error("登陆失败");
+            that.$message.error("登陆失败");
           }
         );
       }
@@ -325,20 +323,20 @@ export default {
   border-radius: 5px;
 }
 
-.vimg{
-    width: 300px;
+.vimg {
+  width: 300px;
   height: 170px;
 }
 #codeImg,
-  #sliderBlock {
-   padding: 7px 7px 0 7px;
-   width: inherit;
-   height: inherit;
-  }
- #sliderBlock {
-   position: absolute;
-   z-index: 4000;
-  }
+#sliderBlock {
+  padding: 7px 7px 0 7px;
+  width: inherit;
+  height: inherit;
+}
+#sliderBlock {
+  position: absolute;
+  z-index: 4000;
+}
 /* dsdsd */
 
 .slider {
@@ -348,44 +346,41 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  }
- .track {
-   margin-left: 7px;
-   width: 286px;
-   height: 38px;
-   background: rgba(28, 136, 188, 0.5);
-   border-radius: 25px;
-   font-size: 14px;
-   line-height: 38px;
-   padding-right: 15px;
-   padding-left: 70px;
-  }
-  .pintuTrue {
-   background: #67c23a;
-   color: #ffffff;
-  }
+}
+.track {
+  margin-left: 7px;
+  width: 286px;
+  height: 38px;
+  background: rgba(28, 136, 188, 0.5);
+  border-radius: 25px;
+  font-size: 14px;
+  line-height: 38px;
+  padding-right: 15px;
+  padding-left: 70px;
+}
+.pintuTrue {
+  background: #67c23a;
+  color: #ffffff;
+}
 .button {
-   position: absolute;
-   width: 50px;
-   height: 50px;
-   line-height: 48px;
-   background: #ffffff;
-   box-shadow: #b9bdc8 0 0 3px;
-   border-radius: 50%;
-   left: 7px;
-   text-align: center;
-   font-size: 28px;
-   color: #3e5d8b;
-  }
-  .operation span {
-
-   color: #9fa3ac;
-   display: inline-block;
-   width: 40px;
-   font-size: 25px;
-   line-height: 40px;
-   text-align: center;
-  
-  
- }
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  line-height: 48px;
+  background: #ffffff;
+  box-shadow: #b9bdc8 0 0 3px;
+  border-radius: 50%;
+  left: 7px;
+  text-align: center;
+  font-size: 28px;
+  color: #3e5d8b;
+}
+.operation span {
+  color: #9fa3ac;
+  display: inline-block;
+  width: 40px;
+  font-size: 25px;
+  line-height: 40px;
+  text-align: center;
+}
 </style>

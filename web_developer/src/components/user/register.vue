@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <router-link class="nav-link" to="/"
+            <router-link class="nav-link" to="/homepage"
               >主页 <span class="sr-only">(current)</span></router-link
             >
           </li>
@@ -38,7 +38,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">报名中心</a>
-              <a class="dropdown-item" href="#">Another action</a>
+              <router-link class="dropdown-item" to="/publicGetTest">考试频道</router-link>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
@@ -51,38 +51,28 @@
       <form action="">
         <div class="form-group">
           <label for="userName">用户名</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="userName"
-            placeholder="请输入用户名"
-          />
+          <el-input type="text" v-model="userName" placeholder="请输入用户名" />
         </div>
         <div class="form-group">
           <label for="fullName">别名</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="fullName"
-            placeholder="请输入别名"
-          />
+          <el-input type="text" v-model="fullName" placeholder="请输入别名" />
         </div>
         <div class="form-group">
           <label for="password">密码</label>
-          <input
+          <el-input
             type="password"
-            class="form-control"
             v-model="password"
-            placeholder="请输入密码"
+            placeholder="请输入8-16位包含至少一个大小写英文字母的密码"
+            show-password
           />
         </div>
         <div class="form-group">
           <label for="password_confirm">密码验证</label>
-          <input
+          <el-input
             type="password"
-            class="form-control"
             v-model="password_confirm"
             placeholder="请再次输入密码"
+            show-password
             @keyup.enter="register"
           />
         </div>
@@ -129,10 +119,23 @@ export default {
         this.password == "" ||
         this.password_confirm == ""
       ) {
-        this.$message.error("有未输入的栏位！");
+        this.$message({
+          message: "有未输入的栏位",
+          type: "warning",
+        });
+      } else if (this.password != this.password_confirm) {
+        this.$message({
+          message: "两次密码输入不一致",
+          type: "warning",
+        });
       } else {
-        if (this.password != this.password_confirm) {
-          this.$message.error("两次密码输入不一致");
+        // 没有检测完善，只有密码的正则表达式
+        var pwdCheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        if (!pwdCheck.test(this.password)) {
+          this.$message({
+          message: "密码格式不正确",
+          type: "warning",
+        });
         } else {
           let register_data = {
             userName: this.userName,
@@ -165,5 +168,4 @@ export default {
 </script>
 
 <style>
-
 </style>

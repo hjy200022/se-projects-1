@@ -74,6 +74,7 @@
       @current-change="handleCurrentChange"
       :current-page="currentPage"
       background
+      align="center"
       layout="total, prev, pager, next, jumper"
       :total="pageTotal"
     >
@@ -145,7 +146,7 @@ export default {
       //每页的数据
       pagesize: 10,
       //页面总数
-      pageTotal: 100,
+      pageTotal: 100000,
 
       //这一行中需要根据哪个属性值
       getRowKeys: (row) => {
