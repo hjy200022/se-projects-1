@@ -40,4 +40,13 @@ public class OperationController {
         List<LogBO> logs = logService.getLogByCondition(pageNum, pageSize ,logRequest);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),logs);
     }
+
+    @GetMapping("/create")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    public Result<List<LogBO>> getLogByCreate(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , String createTime){
+        AssertUtil.assertStringNotBlank(createTime,"日期不能为空");
+        List<LogBO> logs = logService.getLogByCreateAtTime(pageNum, pageSize,createTime);
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),logs);
+    }
 }

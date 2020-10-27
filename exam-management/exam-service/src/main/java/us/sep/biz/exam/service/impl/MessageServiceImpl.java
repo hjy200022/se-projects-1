@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import us.sep.biz.exam.CheckExamTypeUtil;
 import us.sep.biz.exam.request.MessageRequest;
 import us.sep.biz.exam.service.MessageService;
 import us.sep.exam.entity.ExamTypeDO;
@@ -14,6 +15,8 @@ import us.sep.exam.repo.ExamTypeRepo;
 import us.sep.message.builder.MessageBO;
 import us.sep.message.entity.MessageDO;
 import us.sep.message.repo.MessageRepo;
+import us.sep.util.enums.CommonResultCode;
+import us.sep.util.exceptions.CustomizeException;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,8 +28,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private  MessageRepo messageRepo;
+
     @Resource
     private  ExamTypeRepo examTypeRepo;
+
+    @Resource
+    CheckExamTypeUtil checkExamTypeUtil;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -44,6 +51,8 @@ public class MessageServiceImpl implements MessageService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(MessageRequest request) {
      List<MessageDO> messageDOS =  findNoPage(request);
+     if (messageDOS.isEmpty())
+         throw new CustomizeException(CommonResultCode.UNFOUNDED,"找不到满足条件的消息");
      messageRepo.deleteInBatch(messageDOS);
     }
 
@@ -96,6 +105,9 @@ public class MessageServiceImpl implements MessageService {
             message.setContent(request.getContent());
 
         if (!StringUtils.isEmpty(request.getExamType())) {
+            if (!checkExamTypeUtil.checkExamType(request.getExamType())) {
+            throw new CustomizeException(CommonResultCode.ILLEGAL_PARAMETERS,"该类型不存在");
+            }
             Optional<ExamTypeDO> optionalExamTypeDO = examTypeRepo.findByExamTypeName(request.getExamType());
             optionalExamTypeDO.ifPresent(examTypeDO -> message.setExamTypeId(examTypeDO.getExamTypeId()));
         }
@@ -109,6 +121,7 @@ public class MessageServiceImpl implements MessageService {
                 .withMatcher("content" ,ExampleMatcher.GenericPropertyMatchers.contains())
                 .withMatcher("examDescription" ,ExampleMatcher.GenericPropertyMatchers.contains());
         Example<MessageDO> example = Example.of(message , matcher);
+
         return messageRepo.findAll(example);
     }
 

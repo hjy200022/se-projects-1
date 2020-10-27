@@ -26,7 +26,6 @@ public class LogService {
 
     @Transactional(rollbackFor = Exception.class)
     public void Save(LogRequest request){
-
         LogDO logDO = new LogDO();
         logDO.setAction(request.getOperationName());
         logDO.setIp(request.getIp());
@@ -39,12 +38,12 @@ public class LogService {
         logDORepo.save(logDO);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public Page<LogBO> getLog(int pageNum, int pageSize){
         return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).map(LogDO::ToLogBO);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<LogBO> getLogByName(int pageNum, int pageSize , LogRequest request){
         if (StringUtils.isEmpty(request.getUserName()))
             return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).map(LogDO::ToLogBO).getContent();
@@ -54,7 +53,7 @@ public class LogService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<LogBO> getLogByIp(int pageNum, int pageSize , LogRequest request){
         if (StringUtils.isEmpty(request.getIp()))
             return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).map(LogDO::ToLogBO).getContent();
@@ -64,7 +63,7 @@ public class LogService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<LogBO> getLogByResult(int pageNum, int pageSize , LogRequest request){
         if (StringUtils.isEmpty(request.getIfSuccess()) || (!request.getIfSuccess().equals("Y")) && (!request.getIfSuccess().equals("N")))
             return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).map(LogDO::ToLogBO).getContent();
@@ -74,7 +73,7 @@ public class LogService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     public List<LogBO> getLogByOperation(int pageNum, int pageSize , LogRequest request){
         if (StringUtils.isEmpty(request.getOperationName()))
             return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).map(LogDO::ToLogBO).getContent();
@@ -84,7 +83,11 @@ public class LogService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    public List<LogBO> getLogByCreateAtTime(int pageNum, int pageSize , String createTime){
+        return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).getContent().stream().
+                filter(log -> log.getCreatedAt().toString().startsWith(createTime)).map(LogDO::ToLogBO).collect(Collectors.toList());
+    }
+
     public List<LogBO> getLogByCondition(int pageNum, int pageSize ,LogRequest request){
         LogDO logDO = new LogDO();
         if (!StringUtils.isEmpty(request.getIp()))
@@ -116,4 +119,6 @@ public class LogService {
                 filter(log -> log.getCreatedAt().toString().startsWith(request.getCreateTime())).map(LogDO::ToLogBO).collect(Collectors.toList());
 
     }
+
+
 }

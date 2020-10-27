@@ -64,11 +64,7 @@ public class MessageController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<MessageRequest> DeleteMessage( MessageRequest request) {
-        if (checkExamTypeUtil.checkExamType(request.getExamType() ) ){
             messageService.delete(request);
-            return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
-        }else {
-            return new Result<>(false, CommonResultCode.ILLEGAL_PARAMETERS.getCode(), CommonResultCode.ILLEGAL_PARAMETERS.getMessage());
-        }
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
 }
