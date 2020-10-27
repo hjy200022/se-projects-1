@@ -68,7 +68,7 @@ public class MessageServiceImpl implements MessageService {
         if (!StringUtils.isEmpty(request.getExamDescription()))
             message.setExamDescription(request.getExamDescription());
 
-        if (StringUtils.isEmpty(message.getExamTypeId()))
+        if (!StringUtils.isEmpty(message.getExamTypeId()))
             return messageRepo.findAll(PageRequest.of(pageNum, pageSize)).getContent().stream()
                     .map(MessageDO::ToMessageBO).collect(Collectors.toList());
 
@@ -79,7 +79,7 @@ public class MessageServiceImpl implements MessageService {
                 .withMatcher("examDescription" ,ExampleMatcher.GenericPropertyMatchers.contains());
         Example<MessageDO> example = Example.of(message , matcher);
         return messageRepo.findAll(example, PageRequest.of(pageNum, pageSize)).getContent()
-                .stream().map(MessageDO::ToMessageBO).peek(temp -> temp.setExamType(request.getExamType())).collect(Collectors.toList());
+                .stream().map(MessageDO::ToMessageBO)/*.peek(temp -> temp.setExamType(request.getExamType()))*/.collect(Collectors.toList());
     }
 
 

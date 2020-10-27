@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import us.sep.base.AbstractAuditBase;
+import us.sep.exam.builder.UserExamEntryRecordBO;
 
 import javax.persistence.*;
 
@@ -43,6 +44,8 @@ public class UserExamEntryRecordDO extends AbstractAuditBase {
     @Column(nullable = false , updatable = false)
     private boolean ifAttend;
 
-
+    public UserExamEntryRecordBO ToUserExamEntryBO(){
+        return UserExamEntryRecordBO.builder().ifAttend(ifAttend).examEntryId(examEntryId).userExamEntryRecordId(userExamEntryRecordId).userId(userId).build();
+    }
 
 }

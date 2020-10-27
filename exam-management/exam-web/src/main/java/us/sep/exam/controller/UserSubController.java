@@ -93,7 +93,7 @@ public class UserSubController {
    }
 
     @DeleteMapping
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<UserSubRequest> deleteUserSubInBatch(UserSubRequest request){
         AssertUtil.assertNotNull(request,"请求体不能为空");

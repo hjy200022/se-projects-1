@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import us.sep.exam.entity.ExamEntryRecordDO;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,10 +12,10 @@ public interface ExamEntryRecordRepo extends JpaRepository<ExamEntryRecordDO,Lon
 
     Optional<ExamEntryRecordDO> findByExamEntryRecordId(String id);
 
-    List<ExamEntryRecordDO> findByExamEntryId(String activityEntryId);
+    Optional<ExamEntryRecordDO> findByExamEntryId(String examEntryId);
 
     ExamEntryRecordDO deleteByExamEntryRecordId(String id);
 
-    ExamEntryRecordDO deleteByExamEntryId(String activityEntryId);
+    ExamEntryRecordDO deleteByExamEntryId(String examEntryId);
 
 }

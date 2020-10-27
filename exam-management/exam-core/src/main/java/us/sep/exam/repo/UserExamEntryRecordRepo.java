@@ -12,5 +12,11 @@ public interface UserExamEntryRecordRepo extends JpaRepository<UserExamEntryReco
 
     List<UserExamEntryRecordDO> findByExamEntryId(String examEntryId);
 
+    List<UserExamEntryRecordDO> findByUserId(String userId);
+
     Optional<UserExamEntryRecordDO> findByUserExamEntryRecordId(String id);
+
+    boolean existsByExamEntryId(String id);
+
+    boolean existsByUserId(String userId);
 }

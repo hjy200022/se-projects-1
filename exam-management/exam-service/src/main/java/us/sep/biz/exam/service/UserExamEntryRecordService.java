@@ -2,14 +2,16 @@ package us.sep.biz.exam.service;
 
 import us.sep.exam.builder.UserExamEntryRecordBO;
 
+import java.util.List;
+
 public interface UserExamEntryRecordService {
 
 
-    UserExamEntryRecordBO getUserExamEntryRecordByExamEntry(String examEntryId);
+    List<UserExamEntryRecordBO> getUserExamEntryRecordByExamEntry(String examEntryId);
 
-    UserExamEntryRecordBO getUserExamEntryRecordByUserId(String examEntryId);
+    List<UserExamEntryRecordBO> getUserExamEntryRecordByUserId(String userId);
 
-    UserExamEntryRecordBO getUserExamEntryRecordByIfAttend(String examEntryId);
+    List<UserExamEntryRecordBO> getUserExamEntryRecordByIfAttend(boolean ifAttend);
 
 
 }
