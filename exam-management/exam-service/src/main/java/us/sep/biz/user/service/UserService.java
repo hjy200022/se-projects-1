@@ -75,9 +75,13 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public void save(UserRegisterRequest userRegisterRequest) {
         ensureUserNameNotExist(userRegisterRequest.getUserName());
+        if (userRepo.existsByEmail(userRegisterRequest.getEmail())) {
+            throw new CustomizeException(CommonResultCode.ILLEGAL_PARAMETERS,"该邮箱已被注册");
+        }
         User user = userRegisterRequest.toUser();
         user.setUserId(bizIdFactory.getUserId());
         user.setPassword(bCryptPasswordEncoder.encode(userRegisterRequest.getPassword()));
+        user.setEmail(userRegisterRequest.getEmail());
         userRepo.save(user);
         //给用户绑定用户角色
         Role studentRole = null;
@@ -96,6 +100,7 @@ public class UserService {
         User user = userRegisterRequest.toUser();
         user.setUserId(bizIdFactory.getUserId());
         user.setPassword(bCryptPasswordEncoder.encode(userRegisterRequest.getPassword()));
+        user.setEmail(userRegisterRequest.getEmail());
         userRepo.save(user);
         //给用户绑定两个角色：用户和管理者
         Role studentRole = null;

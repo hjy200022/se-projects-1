@@ -64,6 +64,7 @@ public class MessageController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<MessageRequest> DeleteMessage( MessageRequest request) {
+        AssertUtil.assertNotNull(request,"请求不能为空");
             messageService.delete(request);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }

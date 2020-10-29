@@ -21,4 +21,5 @@ public class UserUpdateRequest {
     private String fullName;
 
     private Boolean enabled;
+
 }

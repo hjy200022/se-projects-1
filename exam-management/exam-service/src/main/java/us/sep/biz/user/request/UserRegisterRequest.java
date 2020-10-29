@@ -4,6 +4,7 @@ package us.sep.biz.user.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import us.sep.biz.user.validator.EmailPattern;
 import us.sep.biz.user.validator.FullName;
 import us.sep.user.entity.User;
 
@@ -25,9 +26,13 @@ public class UserRegisterRequest {
     @NotBlank(message = "用户昵称不能为空")
     private String fullName;
 
+    @EmailPattern
+    @NotBlank(message = "用户邮箱不能为空")
+    private String email;
+
     public User toUser() {
         return User.builder().fullName(this.getFullName())
                 .userName(this.getUserName())
-                .enabled(true).build();
+                .enabled(true).email(email).build();
     }
 }

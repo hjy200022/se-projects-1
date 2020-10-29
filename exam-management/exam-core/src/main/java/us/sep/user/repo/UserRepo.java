@@ -16,6 +16,8 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     Optional<User> findByUserId(String userid);
 
+    Optional<User> findByEmail(String email);
+
     @Modifying
     @Transactional(rollbackFor = Exception.class)
     void deleteByUserName(String userName);
@@ -23,6 +25,8 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     boolean existsByUserName(String username);
 
     boolean existsByUserId(String userId);
+
+    boolean existsByEmail(String email);
 
 
 
