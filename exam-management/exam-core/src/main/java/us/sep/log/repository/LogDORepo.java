@@ -11,7 +11,6 @@ import us.sep.log.entity.LogDO;
 public interface LogDORepo extends JpaRepository<LogDO,Long> , JpaSpecificationExecutor<LogDO> {
 
    Page<LogDO> findByTransferUserName(String name, Pageable pageable);
-
     /*
      * 传入Y / N
     */

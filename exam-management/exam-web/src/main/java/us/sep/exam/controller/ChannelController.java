@@ -13,6 +13,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ChannelController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ChannelBO>> getChannel(ChannelRequest request , @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),channelService.getChannel(request,pageNum,pageSize));
     }
 
@@ -40,7 +41,7 @@ public class ChannelController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ChannelBO> createChannel(@Valid ChannelRequest request){
+    public Result<ChannelBO> createChannel(@Valid ChannelRequest request , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),channelService.createChannel(request));
     }
 
@@ -48,7 +49,7 @@ public class ChannelController {
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ChannelBO> updateChannel(@Valid ChannelRequest request){
+    public Result<ChannelBO> updateChannel(@Valid ChannelRequest request , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(request.getChannelId(), "channelId不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), channelService.updateChannel(request));
     }
@@ -57,7 +58,7 @@ public class ChannelController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<String> deleteChannel(String channelId){
+    public Result<String> deleteChannel(String channelId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(channelId, "channelId不能为空");
         channelService.deleteChannel(channelId);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),channelId);

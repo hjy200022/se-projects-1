@@ -15,6 +15,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ExamEntryController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryBO> getExamEntry(String examEntryId){
+    public Result<ExamEntryBO> getExamEntry(String examEntryId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examEntryId,"考试报名信息id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.getExamEntry(examEntryId));
     }
@@ -40,14 +41,14 @@ public class ExamEntryController {
     @GetMapping("/record")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<ExamEntryRecordBO>> getExamEntryRecord(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+    public Result<List<ExamEntryRecordBO>> getExamEntryRecord(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryRecordService.getAllExamEntryRecord(pageNum,pageSize));
     }
 
     @GetMapping("/recordByEntry")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryRecordBO> getExamEntryById(String examEntryId){
+    public Result<ExamEntryRecordBO> getExamEntryById(String examEntryId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examEntryId,"考试报名信息id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryRecordService.getExamEntryRecordByExamEntry(examEntryId));
     }
@@ -55,7 +56,7 @@ public class ExamEntryController {
     @GetMapping("/term")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<ExamEntryBO>> getExamEntryByTerm(String term){
+    public Result<List<ExamEntryBO>> getExamEntryByTerm(String term , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(term,"学期信息不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.getExamEntryByTerm(term));
     }
@@ -63,7 +64,7 @@ public class ExamEntryController {
     @GetMapping("/examDetail")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryBO> getExamEntryByExamDetail(String examDetailId){
+    public Result<ExamEntryBO> getExamEntryByExamDetail(String examDetailId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examDetailId,"学期信息不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.getExamEntryByExamDetail(examDetailId));
     }
@@ -72,7 +73,7 @@ public class ExamEntryController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryBO> createExamEntry(@Valid ExamEntryRequest request){
+    public Result<ExamEntryBO> createExamEntry(@Valid ExamEntryRequest request , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.createExamEntry(request));
     }
 
@@ -80,7 +81,7 @@ public class ExamEntryController {
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryBO> modifyExamEntry(@Valid ExamEntryRequest request){
+    public Result<ExamEntryBO> modifyExamEntry(@Valid ExamEntryRequest request , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(request.getExamEntryId(),"考试报名信息id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.modifyExamEntry(request));
     }
@@ -88,7 +89,7 @@ public class ExamEntryController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryBO> deleteExamEntry(String examEntryId){
+    public Result<ExamEntryBO> deleteExamEntry(String examEntryId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examEntryId,"考试报名信息id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.deleteExamEntry(examEntryId));
     }
@@ -96,7 +97,7 @@ public class ExamEntryController {
     @DeleteMapping("/examDetail")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamEntryBO> deleteExamEntryByExamDetail(String examDetailId){
+    public Result<ExamEntryBO> deleteExamEntryByExamDetail(String examDetailId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examDetailId,"考试信息id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.deleteExamEntryByExamDetail(examDetailId));
     }

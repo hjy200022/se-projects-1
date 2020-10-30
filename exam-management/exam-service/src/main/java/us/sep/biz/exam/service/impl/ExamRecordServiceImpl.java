@@ -76,11 +76,12 @@ public class ExamRecordServiceImpl implements ExamRecordService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExamRecordBO deleteExamRecordByType(String examTypeId) {
+    public List<ExamRecordBO> deleteExamRecordByType(String examTypeId) {
         if (!examRecordRepo.existsByExamTypeId(examTypeId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该类归档信息");
-
-       return examRecordRepo.deleteByExamTypeId(examTypeId).ToExamRecordBO();
+        List<ExamRecordDO> examRecordDOList = examRecordRepo.findByExamTypeId(examTypeId);
+        examRecordRepo.deleteInBatch(examRecordDOList);
+        return examRecordDOList.stream().map(ExamRecordDO::ToExamRecordBO).collect(Collectors.toList());
     }
 
     @Override

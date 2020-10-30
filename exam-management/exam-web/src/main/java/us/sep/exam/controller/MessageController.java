@@ -14,6 +14,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class MessageController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<MessageBO>> getMessageByCondition(MessageRequest request , @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest) {
         AssertUtil.assertNotNull(request);
        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), messageService.find(request,pageNum,pageSize));
 
@@ -46,7 +47,7 @@ public class MessageController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<MessageRequest> PushMessage(@Valid MessageRequest request) {
+    public Result<MessageRequest> PushMessage(@Valid MessageRequest request , HttpServletRequest httpServletRequest) {
        if (checkExamTypeUtil.checkExamType(request.getExamType() ) ){
             messageService.save(request);
            return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
@@ -63,7 +64,7 @@ public class MessageController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<MessageRequest> DeleteMessage( MessageRequest request) {
+    public Result<MessageRequest> DeleteMessage( MessageRequest request , HttpServletRequest httpServletRequest) {
         AssertUtil.assertNotNull(request,"请求不能为空");
             messageService.delete(request);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);

@@ -9,7 +9,7 @@ public interface ExamRecordService {
 
     List<ExamRecordBO> findExamRecordData(ExamRecordRequest request , int pageNum ,int pageSize);
 
-    ExamRecordBO deleteExamRecordByType(String examTypeId);
+    List<ExamRecordBO> deleteExamRecordByType(String examTypeId);
 
     ExamRecordBO deleteExamRecord(String examRecordId);
 

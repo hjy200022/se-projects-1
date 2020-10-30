@@ -12,6 +12,7 @@ import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ExamTypeController {
     @GetMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ExamTypeBO>> getExamTypes(ExamTypeRequest request , @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-                                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+                                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),
                 examTypeService.find(request,pageNum,pageSize));
 
@@ -36,7 +37,7 @@ public class ExamTypeController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamTypeBO> CreateExamType(@Valid ExamTypeRequest request){
+    public Result<ExamTypeBO> CreateExamType(@Valid ExamTypeRequest request, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examTypeService.save(request));
     }
 
@@ -44,7 +45,7 @@ public class ExamTypeController {
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamTypeBO> UpdateExamType(ExamTypeRequest request){
+    public Result<ExamTypeBO> UpdateExamType(ExamTypeRequest request, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examTypeService.update(request));
     }
 
@@ -52,7 +53,7 @@ public class ExamTypeController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<String> deleteExamType(String examTypeId){
+    public Result<String> deleteExamType(String examTypeId, HttpServletRequest httpServletRequest){
         examTypeService.delete(examTypeId);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examTypeId);
     }

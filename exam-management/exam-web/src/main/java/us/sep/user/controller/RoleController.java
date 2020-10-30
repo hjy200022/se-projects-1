@@ -11,6 +11,7 @@ import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,7 +27,7 @@ public class RoleController {
     @GetMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
-    public Result<List<Role>> getAllRole() {
+    public Result<List<Role>> getAllRole(HttpServletRequest httpServletRequest) {
         List<Role> roles = roleService.getAllRole();
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),roles);
     }
@@ -35,7 +36,7 @@ public class RoleController {
     @PostMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
-    public Result<RoleCreateRequest> CreateRole(@Valid RoleCreateRequest request){
+    public Result<RoleCreateRequest> CreateRole(@Valid RoleCreateRequest request, HttpServletRequest httpServletRequest){
         roleService.save(request);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
@@ -44,7 +45,7 @@ public class RoleController {
     @PutMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
-    public Result<RoleCreateRequest> updateRole(RoleCreateRequest request){
+    public Result<RoleCreateRequest> updateRole(RoleCreateRequest request, HttpServletRequest httpServletRequest){
         roleService.update(request);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
@@ -53,7 +54,7 @@ public class RoleController {
     @DeleteMapping
     @Log(loggerName = LoggerName.WEB_DIGEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
-    public Result<RoleCreateRequest> deleteRole(RoleCreateRequest request){
+    public Result<RoleCreateRequest> deleteRole(RoleCreateRequest request, HttpServletRequest httpServletRequest){
         roleService.delete(request);
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }

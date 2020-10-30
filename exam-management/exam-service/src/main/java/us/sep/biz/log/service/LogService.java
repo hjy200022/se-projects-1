@@ -83,9 +83,8 @@ public class LogService {
 
     }
 
-    public List<LogBO> getLogByCreateAtTime(int pageNum, int pageSize , String createTime){
-        return logDORepo.findAll(PageRequest.of(pageNum, pageSize)).getContent().stream().
-                filter(log -> log.getCreatedAt().toString().startsWith(createTime)).map(LogDO::ToLogBO).collect(Collectors.toList());
+    public List<LogBO> getLogByCreateAtTime(String createTime){
+        return logDORepo.findAll().stream().filter(log -> log.getCreatedAt().toString().startsWith(createTime)).map(LogDO::ToLogBO).collect(Collectors.toList());
     }
 
     public List<LogBO> getLogByCondition(int pageNum, int pageSize ,LogRequest request){

@@ -12,6 +12,7 @@ import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -30,14 +31,14 @@ public class MajorController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<MajorBO>> getMajor(String majorName){
+    public Result<List<MajorBO>> getMajor(String majorName, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.findMajorByName(majorName));
     }
 
     @GetMapping("/class")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<MajorBO> getMajorByClass(String className){
+    public Result<MajorBO> getMajorByClass(String className, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.findMajorByClass(className));
     }
 
@@ -45,21 +46,21 @@ public class MajorController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<MajorBO> createMajor(@Valid MajorRequest request){
+    public Result<MajorBO> createMajor(@Valid MajorRequest request, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.createMajor(request));
     }
 
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<MajorBO>> modifyMajor(String major){
+    public Result<List<MajorBO>> modifyMajor(String major, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.deleteMajor(major));
     }
 
     @DeleteMapping("/class")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<MajorBO> modifyMajorByClass(String className){
+    public Result<MajorBO> modifyMajorByClass(String className, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.deleteByClassName(className));
     }
 }

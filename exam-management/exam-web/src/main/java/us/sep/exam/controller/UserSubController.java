@@ -15,6 +15,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,14 +42,14 @@ public class UserSubController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<UserSubscriptionBO>> getUserSub(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+    public Result<List<UserSubscriptionBO>> getUserSub(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userSubscriptionService.findAll(pageNum,pageSize));
     }
 
     @GetMapping("/channel")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<UserSubscriptionBO>> getUserSubByChannelId(String channelId,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+    public Result<List<UserSubscriptionBO>> getUserSubByChannelId(String channelId,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(channelId,"频道id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userSubscriptionService.findByChannelId(channelId,pageNum,pageSize));
     }
@@ -57,7 +58,7 @@ public class UserSubController {
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<UserSubscriptionBO>> getUserSubByUserId(String userId,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+    public Result<List<UserSubscriptionBO>> getUserSubByUserId(String userId,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(userId,"用户id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userSubscriptionService.findByUserId(userId,pageNum,pageSize));
     }
@@ -75,7 +76,7 @@ public class UserSubController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserSubscriptionBO> createUserSub(@Valid UserSubRequest request){
+    public Result<UserSubscriptionBO> createUserSub(@Valid UserSubRequest request , HttpServletRequest httpServletRequest){
         if (!userSubscriptionService.ifUserSubExist(request))
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userSubscriptionService.createUserSub(request));
 
@@ -85,7 +86,7 @@ public class UserSubController {
    @DeleteMapping("/single")
    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
    @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<String> deleteUserSub(UserSubRequest request){
+    public Result<String> deleteUserSub(UserSubRequest request, HttpServletRequest httpServletRequest){
         AssertUtil.assertNotNull(request,"请求体不能为空");
         AssertUtil.assertStringNotBlank(request.getUserChannelId(),"用户频道订阅id不能为空");
             userSubscriptionService.cancelUserSubByUserChannelId(request.getUserChannelId());
@@ -95,7 +96,7 @@ public class UserSubController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserSubRequest> deleteUserSubInBatch(UserSubRequest request){
+    public Result<UserSubRequest> deleteUserSubInBatch(UserSubRequest request, HttpServletRequest httpServletRequest){
         AssertUtil.assertNotNull(request,"请求体不能为空");
         if (!StringUtils.isEmpty(request.getChannelId()))
         userSubscriptionService.cancelUserSubByChannelId(request.getChannelId());

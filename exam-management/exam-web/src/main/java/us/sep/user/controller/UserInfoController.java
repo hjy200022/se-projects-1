@@ -16,6 +16,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -41,7 +42,7 @@ public class UserInfoController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserInfoBO> getUserInfo(String username){
+    public Result<UserInfoBO> getUserInfo(String username, HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(username,"用户名不能为空");
         String name = currentUserUtils.getCurrentUser().getUserName();
         if (!name.equals(username) && !roleService.IsManagerOrAdmin(name)){
@@ -58,7 +59,7 @@ public class UserInfoController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserInfoBO> SaveUserInfo(@Valid UserInfoRequest request){
+    public Result<UserInfoBO> SaveUserInfo(@Valid UserInfoRequest request, HttpServletRequest httpServletRequest){
        String name = currentUserUtils.getCurrentUser().getUserName();
         if (!name.equals(request.getUsername()) && !roleService.IsManagerOrAdmin(name)){
             return new Result<>(false, CommonResultCode.FORBIDDEN.getCode(), CommonResultCode.FORBIDDEN.getMessage());
@@ -70,7 +71,7 @@ public class UserInfoController {
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserInfoBO> UpdateUserInfo(UserInfoRequest request){
+    public Result<UserInfoBO> UpdateUserInfo(UserInfoRequest request, HttpServletRequest httpServletRequest){
         AssertUtil.assertNotNull(request,"请求体不能为空");
         AssertUtil.assertStringNotBlank(request.getUsername(),"用户名不能为空");
         String name = currentUserUtils.getCurrentUser().getUserName();
@@ -85,7 +86,7 @@ public class UserInfoController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserInfoRequest> DeleteUserInfo(UserInfoRequest request){
+    public Result<UserInfoRequest> DeleteUserInfo(UserInfoRequest request, HttpServletRequest httpServletRequest){
         AssertUtil.assertNotNull(request,"请求体不能为空");
         AssertUtil.assertStringNotBlank(request.getUsername(),"用户名不能为空");
         String name = currentUserUtils.getCurrentUser().getUserName();

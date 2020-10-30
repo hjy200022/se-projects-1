@@ -11,6 +11,7 @@ import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -28,7 +29,7 @@ public class UserRoleController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserRoleRequest> createUserRole(@Valid UserRoleRequest request){
+    public Result<UserRoleRequest> createUserRole(@Valid UserRoleRequest request, HttpServletRequest httpServletRequest){
         userRoleManager.createUserRole(request);
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }
@@ -36,7 +37,7 @@ public class UserRoleController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserRoleRequest> deleteUserRole(@Valid UserRoleRequest request){
+    public Result<UserRoleRequest> deleteUserRole(@Valid UserRoleRequest request, HttpServletRequest httpServletRequest){
         userRoleManager.deleteUserRole(request);
         return new Result<> (true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),request);
     }

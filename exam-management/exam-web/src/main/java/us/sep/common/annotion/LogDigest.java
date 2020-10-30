@@ -19,9 +19,11 @@ import us.sep.common.RestAop;
 import us.sep.common.ipUtil;
 import us.sep.security.utils.CurrentUserUtils;
 import us.sep.util.common.Result;
+import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
 import us.sep.util.log.LogLevel;
 import us.sep.util.log.LogMark;
+import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -61,10 +63,10 @@ public class LogDigest extends RestAop {
         //RestRequest request = parseRestRequest(proceedingJoinPoint);
         HttpServletRequest httpServletRequest = parseHttpServletRequest(proceedingJoinPoint);
 
-        //AssertUtil.assertNotNull(request, CommonResultCode.SYSTEM_ERROR.getCode(), "请求解析失败");
-       // AssertUtil.assertNotNull(httpServletRequest, CommonResultCode.SYSTEM_ERROR.getCode(), "请求解析失败");
+        AssertUtil.assertNotNull(httpServletRequest, CommonResultCode.SYSTEM_ERROR.getCode(), "请求解析失败");
 
-        // 获取ip
+
+        // 获取ip+-
         String ip = parseIP(httpServletRequest);
 
         // 获取方法名称

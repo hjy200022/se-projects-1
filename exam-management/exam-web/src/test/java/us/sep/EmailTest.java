@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import us.sep.biz.user.request.EmailRequest;
-import us.sep.biz.user.util.MailSendUtils;
+import us.sep.common.MailSendUtils;
 
 import javax.annotation.Resource;
 
@@ -18,11 +18,14 @@ public class EmailTest {
     @Test
     public void sendMail(){
         EmailRequest request = new EmailRequest();
-        request.setEmailTheme("this is a test theme");
-        request.setEmailContent("芜湖");
-        request.setReceiverName("hujiayue");
-        request.setReceiverEmailAddress("841793915@qq.com");
-        mailSendUtils.sendEmailAsSysExceptionHtml(request);
+        request.setEmailTheme("给傻子的邮件");
+        request.setEmailContent("你是不是傻的呀");
+        request.setReceiverName("傻子方");
+        request.setReceiverEmailAddress("190839936@qq.com");
+        for (int i = 0; i < 15 ; i++) {
+            mailSendUtils.sendEmailAsSysExceptionHtml(request);
+        }
+
     }
 
     @Test

@@ -13,6 +13,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ExamLocationController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ExamLocationBO>> getExamLocation(ExamLocationRequest request , @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-                                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+                                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.findExamLocation(request,pageNum,pageSize));
     }
 
@@ -36,7 +37,7 @@ public class ExamLocationController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamLocationBO> createExamLocation(@Valid ExamLocationRequest request ){
+    public Result<ExamLocationBO> createExamLocation(@Valid ExamLocationRequest request , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.createExamLocation(request));
     }
 
@@ -44,7 +45,7 @@ public class ExamLocationController {
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamLocationBO> updateExamLocation(@Valid ExamLocationRequest request){
+    public Result<ExamLocationBO> updateExamLocation(@Valid ExamLocationRequest request, HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(request.getExamLocationId(),"考场座位号id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.modifyExamLocation(request));
     }
@@ -53,21 +54,21 @@ public class ExamLocationController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamLocationBO> deleteExamLocation(String examLocationId){
+    public Result<ExamLocationBO> deleteExamLocation(String examLocationId, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.deleteByExamLocationId(examLocationId));
     }
 
     @DeleteMapping("/examDetail")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<ExamLocationBO>> deleteExamLocationByExamDetailId(String examDetailId){
+    public Result<List<ExamLocationBO>> deleteExamLocationByExamDetailId(String examDetailId, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.deleteByExamDetailId(examDetailId));
     }
 
     @DeleteMapping("/user")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<ExamLocationBO>> deleteExamLocationByUserId(String userId){
+    public Result<List<ExamLocationBO>> deleteExamLocationByUserId(String userId, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.deleteByUserId(userId));
     }
 

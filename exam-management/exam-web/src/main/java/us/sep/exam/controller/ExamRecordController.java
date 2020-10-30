@@ -12,6 +12,7 @@ import us.sep.util.log.Log;
 import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ExamRecordController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ExamRecordBO>> getExamRecord(ExamRecordRequest request , @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-                                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+                                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize , HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.findExamRecordData(request,pageNum,pageSize));
     }
 
@@ -35,7 +36,7 @@ public class ExamRecordController {
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamRecordBO> modifyExamRecord(@Valid ExamRecordRequest request ){
+    public Result<ExamRecordBO> modifyExamRecord(@Valid ExamRecordRequest request, HttpServletRequest httpServletRequest ){
         AssertUtil.assertStringNotBlank(request.getExamRecordId(),"考试归档id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.modifyExamRecord(request));
     }
@@ -44,7 +45,7 @@ public class ExamRecordController {
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamRecordBO> deleteExamRecord(String examRecordId){
+    public Result<ExamRecordBO> deleteExamRecord(String examRecordId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examRecordId,"考试归档id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.deleteExamRecord(examRecordId));
     }
@@ -53,7 +54,7 @@ public class ExamRecordController {
     @DeleteMapping("/examType")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<ExamRecordBO> deleteExamRecordByExamType(String examTypeId){
+    public Result<List<ExamRecordBO>> deleteExamRecordByExamType(String examTypeId , HttpServletRequest httpServletRequest){
         AssertUtil.assertStringNotBlank(examTypeId,"考试类型id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examRecordService.deleteExamRecordByType(examTypeId));
     }
