@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <router-link to="homepage">to homepage</router-link>
     <el-table
       :data="
         registrationList.slice(
@@ -11,28 +10,44 @@
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
     >
-      <el-table-column prop="contact" label="联系人"> </el-table-column>
-      <el-table-column prop="examDescription" label="考试内容">
+      <el-table-column prop="contact" label="联系人" align="center">
       </el-table-column>
-      <el-table-column prop="number" label="可报名总人数" sortable>
+      <el-table-column prop="examDescription" label="考试内容" align="center">
       </el-table-column>
+      <el-table-column
+        prop="number"
+        label="总人数"
+        sortable
+        align="center"
+        width="100"
+      >
+      </el-table-column>
+      <!-- <el-table-column
+        prop="last"
+        label="剩余人数"
+        sortable
+        align="center"
+        width="100"
+      >
+      </el-table-column> -->
       <el-table-column
         prop="term"
         label="学期"
         :formatter="termFormatter"
         sortable
+        align="center"
       >
       </el-table-column>
-      <el-table-column label="状态" width="150" prop="stateUTF">
+      <el-table-column label="状态" prop="stateUTF" align="center" width="150">
+        <template slot-scope="scope">
+          <template>
+            <el-tag :type="scope.row.type">{{ scope.row.stateUTF }}</el-tag>
+          </template>
+        </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button
-            type="danger"
-            @click="deleteRegistrationRelease(scope.row)"
-            size="small"
-            >报名</el-button
-          >
+          <el-button @click="takeIn(scope.row)" size="small">报名</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,7 +68,7 @@ import axios from "axios";
 import { mapState, mapActions } from "vuex";
 export default {
   inject: ["reload"],
-  name: "getRegistration",
+  name: "publicGetExam",
   data() {
     return {
       loading: false,
@@ -119,18 +134,36 @@ export default {
               "examDescription",
               this.examList[i].examDescription
             );
-
-            if (item.state == "START") {
-              this.$set(item, "stateUTF", "可报名");
-            } else if (item.state == "FINISH") {
-              this.$set(item, "stateUTF", "报名结束");
-            } else if (item.state == "CANCEL") {
-              this.$set(item, "stateUTF", "报名取消");
-            } else if (item.state == "PREPARE") {
-              this.$set(item, "stateUTF", "准备中");
-            }
           }
         }
+
+        if (item.state == "START") {
+          this.$set(item, "stateUTF", "可报名");
+          this.$set(item, "type", "success");
+        } else if (item.state == "FINISH") {
+          this.$set(item, "stateUTF", "报名结束");
+          this.$set(item, "type", "danger");
+        } else if (item.state == "CANCEL") {
+          this.$set(item, "stateUTF", "报名取消");
+          this.$set(item, "type", "info");
+        } else if (item.state == "PREPARE") {
+          this.$set(item, "stateUTF", "准备中");
+          this.$set(item, "type", "primary");
+        }
+
+        //获取报名考试人数
+        //未做
+        // var that = this;
+        // axios({
+        //   headers: { Authorization: this.print.Authorization },
+        //   method: "get",
+        //   url: "http://kana.chat:70/examEntry?examEntryId=" + item.examEntryId,
+        // }).then(function (reponse) {
+        //   //console.log(reponse.data.data);
+        //   //that.$set(item, "last", item.number - reponse.data.data.length);
+        // });
+
+        //判断有无报名显示不一样的按钮
       });
     },
 
@@ -146,6 +179,37 @@ export default {
 
     handleCurrentChange: function (currentPage) {
       this.currentPage = currentPage;
+    },
+
+    takeIn: function (row) {
+      if (row.state == "CANCEL") {
+        this.$message({
+          message: "考试报名已取消",
+          type: "warning",
+        });
+      } else if (row.state == "PREPARE") {
+        this.$message({
+          message: "考试报名正在准备中",
+          type: "info",
+        });
+      } else if (row.state == "FINISH") {
+        this.$message({
+          message: "考试报名已经结束",
+          type: "error",
+        });
+      } else if (row.state == "START") {
+        this.$message({
+          message: "前往报名页面",
+          type: "success",
+        });
+        this.$router.push({
+          name: "takeinExam",
+          params: {
+            examEntryId: row.examEntryId,
+            examDescription: row.examDescription,
+          },
+        });
+      }
     },
   },
 };

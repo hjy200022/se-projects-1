@@ -10,15 +10,31 @@ import personalAccount from '../components/user/personalPages/personalAccount'
 import personalImformation from '../components/user/personalPages/personalImformation'
 import personalProgram from '../components/user/personalPages/personalProgram'
 import personalNotice from '../components/user/personalPages/personalNotice'
+/* 消息子路由
+  区分消息来源
+*/
+import examDetailNotice from '../components/user/personalPages/notice/examDetailNotice'
+import examRegistration from '../components/user/personalPages/notice/examRegistration'
+import examResultNotice from '../components/user/personalPages/notice/examResultNotice'
 /* 管理员 */
 import managerChangeRole from '../components/user/managerPages/managerChangeRole'
 import managerGetUserInfo from '../components/user/managerPages/managerGetUserInfo'
 import managerTestType from '../components/user/managerPages/managerTestType'
 import managerChannel from '../components/user/managerPages/managerChannel'
 import managerGetLog from '../components/user/managerPages/managerGetLog'
+/* 考试管理子路由 */
+import managerExam from '../components/user/managerPages/managerTest/managerExam'
+import registrationRelease from '../components/user/managerPages/managerTest/registrationRelease'
+import managerScore from '../components/user/managerPages/managerTest/managerScore'
+/* 报名子路由 */
+import getRegistration from '../components/user/managerPages/managerTest/registration/getRegistration'
+import setRegistration from '../components/user/managerPages/managerTest/registration/setRegistration'
 
+/* 主页菜单子路由 */
 import homepage from '../components/public/homepage'
-import publicGetTest from '../components/public/publicGetTest'
+import publicGetChannel from '../components/public/publicGetChannel'
+import publicGetExam from '../components/public/publicGetExam'
+import takeinExam from '../components/public/takeinExam'
 /* 测试页面 */
 import test from '../components/test'
 
@@ -54,7 +70,24 @@ export default new Router({
             {
               path: 'personalNotice',
               name: 'personalNotice',
-              component: personalNotice
+              component: personalNotice,
+              children: [
+                {
+                  path: 'examDetailNotice',
+                  name: 'examDetailNotice',
+                  component: examDetailNotice,
+                },
+                {
+                  path: 'examRegistration',
+                  name: 'examRegistration',
+                  component: examRegistration,
+                },
+                {
+                  path: 'examResultNotice',
+                  name: 'examResultNotice',
+                  component: examResultNotice,
+                },
+              ]
             },
             {
               path: 'managerChangeRole',
@@ -69,7 +102,36 @@ export default new Router({
             {
               path: 'managerTestType',
               name: 'managerTestType',
-              component: managerTestType
+              component: managerTestType,
+              children: [
+                {
+                  path: 'managerExam',
+                  name: 'managerExam',
+                  component: managerExam,
+                },
+                {
+                  path: 'registrationRelease',
+                  name: 'registrationRelease',
+                  component: registrationRelease,
+                  children: [
+                    {
+                      path: 'getRegistration',
+                      name: 'getRegistration',
+                      component: getRegistration,
+                    },
+                    {
+                      path: 'setRegistration',
+                      name: 'setRegistration',
+                      component: setRegistration,
+                    },
+                  ]
+                },
+                {
+                  path: 'managerScore',
+                  name: 'managerScore',
+                  component: managerScore,
+                },
+              ],
             },
             {
               path: 'managerChannel',
@@ -89,9 +151,19 @@ export default new Router({
           component: homepage
         },
         {
-          path: '/publicGetTest',
-          name: 'publicGetTest',
-          component: publicGetTest
+          path: '/publicGetChannel',
+          name: 'publicGetChannel',
+          component: publicGetChannel
+        },
+        {
+          path: '/publicGetExam',
+          name: 'publicGetExam',
+          component: publicGetExam
+        },
+        {
+          path: '/takeinExam',
+          name: 'takeinExam',
+          component: takeinExam
         },
       ]
     },

@@ -1,144 +1,123 @@
 <template>
   <div class="container">
-    <form v-if="ifUpdate">
+    <el-form :model="personInfo" class="demo-ruleForm" v-if="ifUpdate">
       <fieldset disabled>
         <div class="form-group">
-          <label for="disabledTextInput">姓名</label>
-          <input
-            type="text"
-            id="disabledTextInput"
-            class="form-control"
-            :placeholder="realName"
-          />
+          <el-form-item prop="realName"
+            >姓名
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfo.realName"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">学号</label>
-          <input
-            type="text"
-            id="disabledTextInput"
-            class="form-control"
-            :placeholder="stuNo"
-          />
+          <el-form-item prop="stuNo"
+            >学号
+            <el-input type="text" autocomplete="off" v-model="personInfo.stuNo"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">专业</label>
-          <input
-            type="text"
-            id="disabledTextInput"
-            class="form-control"
-            :placeholder="major"
-          />
+          <el-form-item prop="major"
+            >专业
+            <el-input type="text" autocomplete="off" v-model="personInfo.major"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">专业班级</label>
-          <input
-            type="text"
-            id="disabledTextInput"
-            class="form-control"
-            :placeholder="className"
-          />
+          <el-form-item prop="className"
+            >专业班级
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfo.className"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">身份证号码</label>
-          <input
-            type="text"
-            id="disabledTextInput"
-            class="form-control"
-            :placeholder="identificationNumber"
-          />
+          <el-form-item prop="identificationNumber"
+            >身份证号码
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfo.identificationNumber"
+          /></el-form-item>
         </div>
       </fieldset>
-      <input
-        type="button"
-        class="btn btn-primary"
-        value="更改信息"
-        @click="changeIfUpdate"
-      />
-    </form>
+      <el-button class="btn btn-primary" @click="changeIfUpdate"
+        >更改信息</el-button
+      >
+    </el-form>
 
-    <form v-if="!ifUpdate">
+    <el-form
+      :model="personInfoUpdate"
+      ref="personInfoUpdate"
+      :rules="rule"
+      class="demo-ruleForm"
+      v-if="!ifUpdate"
+    >
       <fieldset>
         <div class="form-group">
-          <label for="disabledTextInput">姓名</label>
-          <input type="text" class="form-control" v-model="u_realName" />
+          <el-form-item prop="u_realName"
+            >姓名
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfoUpdate.u_realName"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">学号</label>
-          <input type="text" class="form-control" v-model="u_stuNo" />
+          <el-form-item prop="u_stuNo"
+            >学号
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfoUpdate.u_stuNo"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">专业</label>
-          <input type="text" class="form-control" v-model="u_major" />
+          <el-form-item prop="u_major"
+            >专业
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfoUpdate.u_major"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">专业班级</label>
-          <input type="text" class="form-control" v-model="u_className" />
+          <el-form-item prop="u_className"
+            >专业班级
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfoUpdate.u_className"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="disabledTextInput">身份证号码</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="u_identificationNumber"
-          />
+          <el-form-item prop="u_identificationNumber"
+            >身份证号码
+            <el-input
+              type="text"
+              autocomplete="off"
+              v-model="personInfoUpdate.u_identificationNumber"
+          /></el-form-item>
         </div>
       </fieldset>
-      <input
-        type="button"
-        class="btn btn-primary"
-        value="取消更改"
-        @click="changeIfUpdate"
-      />
-      <input
-        type="button"
-        class="btn btn-primary"
-        value="更改信息"
-        data-toggle="modal"
-        data-target="#confirmUpdateImformation"
-      />
-
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="confirmUpdateImformation"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
+      <el-button type="button" @click="changeIfUpdate">取消更改</el-button>
+      <el-button type="button" @click="dialogVisible = true"
+        >更改信息</el-button
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">提示</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">请确认信息填写正确再保存信息</div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                关闭
-              </button>
-              <input
-                type="button"
-                class="btn btn-primary"
-                value="保存更新"
-                @click="updateInformation"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+        <span>确认修改个人信息吗？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="updateInformation('personInfoUpdate')"
+            >确 定</el-button
+          >
+        </span>
+      </el-dialog>
+    </el-form>
   </div>
 </template>
 
@@ -149,19 +128,53 @@ export default {
   name: "personalImformation",
   data() {
     return {
-      realName: "",
-      stuNo: "",
-      major: "",
-      className: "",
-      identificationNumber: "",
+      personInfo: {
+        realName: "",
+        stuNo: "",
+        major: "",
+        className: "",
+        identificationNumber: "",
+      },
       ifUpdate: true,
 
       //更新专用，判断是录入还是更新
-      u_realName: "",
-      u_stuNo: "",
-      u_major: "",
-      u_className: "",
-      u_identificationNumber: "",
+      personInfoUpdate: {
+        u_realName: "",
+        u_stuNo: "",
+        u_major: "",
+        u_className: "",
+        u_identificationNumber: "",
+      },
+      dialogVisible: false,
+
+      rule: {
+        u_realName: [
+          { required: true, message: "请输入姓名", trigger: "blur" },
+        ],
+        u_stuNo: [
+          { required: true, message: "请输入学号", trigger: "blur" },
+          { min: 9, max: 10, message: "请输入正确的学号", trigger: "blur" },
+        ],
+        u_major: [{ required: true, message: "请输入专业", trigger: "blur" }],
+        u_className: [
+          { required: true, message: "请输入班级号", trigger: "blur" },
+        ],
+        u_identificationNumber: [
+          { required: true, message: "请输入身份证", trigger: "blur" },
+          {
+            min: 15,
+            max: 18,
+            message: "请如实填写18位身份证号码",
+            trigger: "blur",
+          },
+          {
+            required: true,
+            pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+            message: "身份证格式错误，请输入正确的身份证号码",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   mounted: function () {
@@ -184,17 +197,13 @@ export default {
       }).then(
         function (reponse) {
           if (reponse.data.data != null) {
-            that.realName = reponse.data.data.realName;
-            that.stuNo = reponse.data.data.stuNo;
-            that.major = reponse.data.data.major;
-            that.className = reponse.data.data.className;
-            that.identificationNumber = reponse.data.data.identificationNumber;
+            that.personInfo = reponse.data.data;
 
-            that.u_realName = reponse.data.data.realName;
-            that.u_stuNo = reponse.data.data.stuNo;
-            that.u_major = reponse.data.data.major;
-            that.u_className = reponse.data.data.className;
-            that.u_identificationNumber =
+            that.personInfoUpdate.u_realName = reponse.data.data.realName;
+            that.personInfoUpdate.u_stuNo = reponse.data.data.stuNo;
+            that.personInfoUpdate.u_major = reponse.data.data.major;
+            that.personInfoUpdate.u_className = reponse.data.data.className;
+            that.personInfoUpdate.u_identificationNumber =
               reponse.data.data.identificationNumber;
           }
         },
@@ -206,127 +215,89 @@ export default {
 
     changeIfUpdate: function () {
       this.ifUpdate = !this.ifUpdate;
-      this.u_realName = this.realName;
-      this.u_stuNo = this.stuNo;
-      this.u_major = this.major;
-      this.u_className = this.className;
-      this.u_identificationNumber = this.identificationNumber;
+      this.personInfoUpdate.u_realName = this.personInfo.realName;
+      this.personInfoUpdate.u_stuNo = this.personInfo.stuNo;
+      this.personInfoUpdate.u_major = this.personInfo.major;
+      this.personInfoUpdate.u_className = this.personInfo.className;
+      this.personInfoUpdate.u_identificationNumber = this.personInfo.identificationNumber;
     },
 
-    updateInformation: function () {
-      //身份证正则表达式
-      var identificationNumberCheck = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-      //学号正则表达式
-      var stuNoCheck = /^[0-9]{9}$/;
-      var that = this;
-      if (this.print.Authorization == "") {
-        this.$message.error("登陆失效，请重新登陆");
-        this.$router.push({ name: "HelloWorld" });
-      }
-      if (
-        this.u_realName == this.realName &&
-        this.u_stuNo == this.stuNo &&
-        this.u_major == this.major &&
-        this.u_className == this.className &&
-        this.u_identificationNumber == this.identificationNumber
-      ) {
-        this.$message({
-          message: "更改失败，没有需要更改的内容",
-          type: "warning",
-        });
-      } else if (!identificationNumberCheck.test(this.u_identificationNumber)) {
-        this.$message({
-          message: "身份证格式错误",
-          type: "warning",
-        });
-      } else if (!stuNoCheck.test(this.u_stuNo)) {
-        this.$message({
-          message: "学号格式错误",
-          type: "warning",
-        });
-      } else {
-        //判断是录入还是更新
-        //只要有一个空值就是录入
-        let update_data = {
-          username: this.print.username,
-          className: this.u_className,
-          identificationNumber: this.u_identificationNumber,
-          major: this.u_major,
-          realName: this.u_realName,
-          stuNo: this.u_stuNo,
-        };
-        if (this.realName == "") {
-          console.log("录入 post");
-          //录入 post请求
-          axios({
-            method: "post",
-            url: "http://kana.chat:70/userInfo",
-            data: update_data,
-            transformRequest: [
-              function (data) {
-                let ret = "";
-                for (let it in data) {
-                  ret +=
-                    encodeURIComponent(it) +
-                    "=" +
-                    encodeURIComponent(data[it]) +
-                    "&";
-                }
-                return ret;
+    updateInformation: function (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var that = this;
+          //判断是录入还是更新
+          //只要有一个空值就是录入
+          if (this.personInfo.realName == "") {
+            console.log("录入 post");
+            //录入 post请求
+            axios({
+              method: "post",
+              url: "http://kana.chat:70/userInfo",
+              headers: {
+                Authorization: this.print.Authorization,
+                "Content-Type":
+                  "application/x-www-form-urlencoded; charset=UTF-8",
               },
-            ],
-            headers: {
-              Authorization: this.print.Authorization,
-            },
-          }).then(
-            function (reponse) {
-              that.$message({
-                message: "更改成功",
-                type: "success",
-              });
-              that.$router.go(0);
-            },
-            function (err) {
-              that.$message.error("更改失败");
-            }
-          );
+              params: {
+                username: this.print.username,
+                realName: this.personInfoUpdate.u_realName,
+                className: this.personInfoUpdate.u_className,
+                stuNo: this.personInfoUpdate.u_stuNo,
+                major: this.personInfoUpdate.u_major,
+                identificationNumber: this.personInfoUpdate
+                  .u_identificationNumber,
+              },
+            }).then(
+              function (reponse) {
+                that.$message({
+                  message: "更改成功",
+                  type: "success",
+                });
+                that.$router.go(0);
+              },
+              function (err) {
+                that.$message.error("更改失败");
+              }
+            );
+          } else {
+            console.log("更新 put");
+            //更新 put请求
+            axios({
+              method: "put",
+              url: "http://kana.chat:70/userInfo",
+              params: {
+                username: this.print.username,
+                realName: this.personInfoUpdate.u_realName,
+                className: this.personInfoUpdate.u_className,
+                stuNo: this.personInfoUpdate.u_stuNo,
+                major: this.personInfoUpdate.u_major,
+                identificationNumber: this.personInfoUpdate
+                  .u_identificationNumber,
+              },
+              headers: {
+                Authorization: this.print.Authorization,
+                "Content-Type":
+                  "application/x-www-form-urlencoded; charset=UTF-8",
+              },
+            }).then(
+              function (reponse) {
+                that.$message({
+                  message: "更改成功",
+                  type: "success",
+                });
+                that.$router.go(0);
+              },
+              function (err) {
+                that.$message.error("更改失败");
+              }
+            );
+          }
         } else {
-          console.log("更新 put");
-          //更新 put请求
-          axios({
-            method: "put",
-            url: "http://kana.chat:70/userInfo",
-            data: update_data,
-            transformRequest: [
-              function (data) {
-                let ret = "";
-                for (let it in data) {
-                  ret +=
-                    encodeURIComponent(it) +
-                    "=" +
-                    encodeURIComponent(data[it]) +
-                    "&";
-                }
-                return ret;
-              },
-            ],
-            headers: {
-              Authorization: this.print.Authorization,
-            },
-          }).then(
-            function (reponse) {
-              that.$message({
-                message: "更改成功",
-                type: "success",
-              });
-              that.$router.go(0);
-            },
-            function (err) {
-              that.$message.error("更改失败");
-            }
-          );
+          this.dialogVisible = false;
+          return false;
         }
-      }
+      });
     },
   },
 };

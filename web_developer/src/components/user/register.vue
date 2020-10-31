@@ -37,8 +37,12 @@
               考试报名
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">报名中心</a>
-              <router-link class="dropdown-item" to="/publicGetTest">考试频道</router-link>
+              <router-link class="dropdown-item" to="/publicGetExam"
+                >报名中心</router-link
+              >
+              <router-link class="dropdown-item" to="/publicGetTest"
+                >考试频道</router-link
+              >
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
@@ -48,48 +52,81 @@
     </nav>
 
     <div class="container">
-      <form action="">
+      <el-form
+        :model="registerForm"
+        ref="registerForm"
+        class="demo-ruleForm"
+        :rules="rule"
+      >
         <div class="form-group">
-          <label for="userName">用户名</label>
-          <el-input type="text" v-model="userName" placeholder="请输入用户名" />
+          <el-form-item prop="userName"
+            >用户名
+            <el-input
+              type="text"
+              v-model="registerForm.userName"
+              autocomplete="off"
+              placeholder="请输入用户名"
+            />
+          </el-form-item>
         </div>
         <div class="form-group">
-          <label for="fullName">别名</label>
-          <el-input type="text" v-model="fullName" placeholder="请输入别名" />
+          <el-form-item prop="fullName"
+            >别名
+            <el-input
+              type="text"
+              v-model="registerForm.fullName"
+              placeholder="请输入别名"
+            />
+          </el-form-item>
         </div>
         <div class="form-group">
-          <label for="password">密码</label>
-          <el-input
-            type="password"
-            v-model="password"
-            placeholder="请输入8-16位包含至少一个大小写英文字母的密码"
-            show-password
-          />
+          <el-form-item prop="email"
+            >邮箱
+            <el-input
+              type="text"
+              v-model="registerForm.email"
+              placeholder="请输入邮箱"
+            />
+          </el-form-item>
         </div>
         <div class="form-group">
-          <label for="password_confirm">密码验证</label>
-          <el-input
-            type="password"
-            v-model="password_confirm"
-            placeholder="请再次输入密码"
-            show-password
-            @keyup.enter="register"
-          />
+          <el-form-item prop="password"
+            >密码
+            <el-input
+              type="password"
+              v-model="registerForm.password"
+              placeholder="请输入密码"
+              show-password
+            />
+          </el-form-item>
         </div>
-        <input
-          type="button"
-          class="btn btn-primary"
-          value="注册"
-          :plain="true"
-          @click="register"
-        />
-        <input
-          type="button"
-          class="btn btn-primary"
-          value="返回"
-          @click="returnHistory"
-        />
-      </form>
+        <div class="form-group">
+          <el-form-item prop="password_confirm"
+            >密码验证
+            <el-input
+              type="password"
+              v-model="registerForm.password_confirm"
+              placeholder="请再次输入密码"
+              show-password
+              @keyup.enter="register"
+            />
+          </el-form-item>
+        </div>
+        <br />
+        <div class="form-group">
+          <el-form-item>
+            <el-button type="primary" @click="register('registerForm')"
+              >注册</el-button
+            >
+            <el-button type="info" @click="resetForm('registerForm')"
+              >重置</el-button
+            >
+            <el-button class="btn btn-primary" @click="returnHistory"
+              >返回</el-button
+            >
+          </el-form-item>
+        </div>
+      </el-form>
     </div>
   </div>
 </template>
@@ -99,11 +136,53 @@ import axios from "axios";
 export default {
   name: "register",
   data() {
+    var checkpwd = /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{6,20}$/;
+    var validatePwd = (rule, value, callback) => {
+      if (!checkpwd.test(value)) {
+        callback(new Error("密码应是6-20位数字，字母或字符！"));
+      } else {
+        callback();
+      }
+    };
+    var validatePwdConfirm = (rule, value, callback) => {
+      if (!checkpwd.test(value)) {
+        callback(new Error("密码应是6-20位数字，字母或字符！"));
+      } else if (this.registerForm.password !== value) {
+        callback(new Error("两次密码不一致"));
+      } else {
+        callback();
+      }
+    };
     return {
-      userName: "",
-      fullName: "",
-      password: "",
-      password_confirm: "",
+      registerForm: {
+        userName: "",
+        fullName: "",
+        email: "",
+        password: "",
+        password_confirm: "",
+      },
+      rule: {
+        userName: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+        ],
+        fullName: [{ required: true, message: "请输入别名", trigger: "blur" }],
+        email: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"],
+          },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { validator: validatePwd, trigger: "blur" },
+        ],
+        password_confirm: [
+          { required: true, message: "请输入密码进行验证", trigger: "blur" },
+          { validator: validatePwdConfirm, trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
@@ -111,57 +190,39 @@ export default {
       this.$router.go(-1);
     },
 
-    register: function () {
-      var that = this;
-      if (
-        this.userName == "" ||
-        this.fullName == "" ||
-        this.password == "" ||
-        this.password_confirm == ""
-      ) {
-        this.$message({
-          message: "有未输入的栏位",
-          type: "warning",
-        });
-      } else if (this.password != this.password_confirm) {
-        this.$message({
-          message: "两次密码输入不一致",
-          type: "warning",
-        });
-      } else {
-        // 没有检测完善，只有密码的正则表达式
-        var pwdCheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
-        if (!pwdCheck.test(this.password)) {
-          this.$message({
-          message: "密码格式不正确",
-          type: "warning",
-        });
+    register: function (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          var that = this;
+          axios
+            .post("http://kana.chat:70/users/sign-up", this.registerForm)
+            .then(
+              function (reponse) {
+                that.$message({
+                  message: "注册成功，请重新登陆",
+                  type: "success",
+                });
+                that.$router.push({
+                  name: "login",
+                  //传输没用上
+                  params: {
+                    username: that.userName,
+                    password: that.password,
+                  },
+                });
+              },
+              function (err) {
+                that.$message.error(err);
+              }
+            );
         } else {
-          let register_data = {
-            userName: this.userName,
-            fullName: this.fullName,
-            password: this.password,
-          };
-          axios.post("http://kana.chat:70/users/sign-up", register_data).then(
-            function (reponse) {
-              that.$message({
-                message: "注册成功，请重新登陆",
-                type: "success",
-              });
-              that.$router.push({
-                name: "login",
-                params: {
-                  username: that.userName,
-                  password: that.password,
-                },
-              });
-            },
-            function (err) {
-              that.$message.error(err);
-            }
-          );
+          return false;
         }
-      }
+      });
+    },
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     },
   },
 };

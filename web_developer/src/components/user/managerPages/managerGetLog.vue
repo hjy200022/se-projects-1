@@ -120,7 +120,7 @@ export default {
       //每页的数据
       pagesize: 10,
       //数组总数
-      pageTotal: 10000,
+      pageTotal: 100000,
 
       //条件检索用数据
       form: {
@@ -159,7 +159,7 @@ export default {
           Authorization: this.print.Authorization,
         },
         method: "get",
-        url: "http://kana.chat:70/log?pageNum=&pageSize=10000",
+        url: "http://kana.chat:70/log?pageNum=&pageSize=100000",
       }).then(
         function (reponse) {
           that.log = reponse.data.data;
@@ -200,7 +200,7 @@ export default {
         method: "get",
         params: {
           pageNum: 0,
-          pageSize: 10000,
+          pageSize: 100000,
           userName: this.form.userName,
           operationName: this.form.operationName,
           //忽略不填

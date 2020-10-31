@@ -1,9 +1,13 @@
 <template>
-  <div>查看系统给个人的通知页面</div>
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "personalNotice",
+  name: "personNotice",
+  methods: {
+  },
 };
 </script>

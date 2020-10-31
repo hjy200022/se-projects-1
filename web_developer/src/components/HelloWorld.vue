@@ -37,8 +37,10 @@
               考试报名
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">报名中心</a>
-              <router-link class="dropdown-item" to="/publicGetTest"
+              <router-link class="dropdown-item" to="/publicGetExam"
+                >报名中心</router-link
+              >
+              <router-link class="dropdown-item" to="/publicGetChannel"
                 >考试频道</router-link
               >
               <div class="dropdown-divider"></div>
@@ -83,17 +85,6 @@
             </div>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Search
-          </button>
-        </form>
       </div>
     </nav>
     <div class="to-text-center">
@@ -121,6 +112,15 @@ export default {
   },
   mounted: function () {
     this.getUserName();
+    console.log(this.$route.path);
+    if (this.$route.path == "/") {
+      var that = this;
+      setTimeout(function () {
+        that.$router.push({
+          name: "homepage",
+        });
+      }, 300);
+    }
   },
   created: function () {
     this.setState();
@@ -180,6 +180,9 @@ export default {
         Authorization: "",
         username: "",
       });
+      this.$store.commit("print/setUserId", {
+        userId: "",
+      });
       this.$router.push({
         name: "homepage",
       });
@@ -188,9 +191,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.to-text-center {
-  text-align: center;
-}
-</style>

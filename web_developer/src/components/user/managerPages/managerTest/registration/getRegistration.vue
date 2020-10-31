@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <router-link to="homepage">to homepage</router-link>
     <el-table
       :data="
         registrationList.slice(
@@ -9,6 +8,7 @@
         )
       "
       style="width: 100%"
+      @cell-click="ifUpdateState"
       :default-sort="{ prop: 'date', order: 'descending' }"
     >
       <el-table-column prop="contact" label="联系人"> </el-table-column>
@@ -23,15 +23,37 @@
         sortable
       >
       </el-table-column>
-      <el-table-column label="状态" width="150" prop="stateUTF">
+      <el-table-column label="状态" width="150">
+        <template slot-scope="scope">
+          <template v-if="scope.row.ifUpdate">
+            <el-tag :type="scope.row.type">{{ scope.row.stateUTF }}</el-tag>
+          </template>
+          <template v-else>
+            <el-select v-model="state" placeholder="请选择">
+              <el-option
+                v-for="item in stateOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
           <el-button
+            @click="updateState(scope.row)"
+            size="small"
+            v-if="!scope.row.ifUpdate"
+            >修改</el-button
+          >
+          <el-button
             type="danger"
             @click="deleteRegistrationRelease(scope.row)"
             size="small"
-            >报名</el-button
+            >删除</el-button
           >
         </template>
       </el-table-column>
@@ -67,6 +89,27 @@ export default {
       pagesize: 10,
       //数组总数
       pageTotal: 100000,
+
+      //状态表
+      stateOptions: [
+        {
+          value: "START",
+          label: "报名开始",
+        },
+        {
+          value: "FINISH",
+          label: "报名结束",
+        },
+        {
+          value: "CANCEL",
+          label: "报名取消",
+        },
+        {
+          value: "PREPARE",
+          label: "报名准备",
+        },
+      ],
+      state: "",
     };
   },
   computed: {
@@ -122,13 +165,19 @@ export default {
 
             if (item.state == "START") {
               this.$set(item, "stateUTF", "可报名");
+              this.$set(item, "type", "success");
             } else if (item.state == "FINISH") {
               this.$set(item, "stateUTF", "报名结束");
+              this.$set(item, "type", "danger");
             } else if (item.state == "CANCEL") {
               this.$set(item, "stateUTF", "报名取消");
+              this.$set(item, "type", "info");
             } else if (item.state == "PREPARE") {
               this.$set(item, "stateUTF", "准备中");
+              this.$set(item, "type", "primary");
             }
+            //是否可编辑单元格
+            this.$set(item, "ifUpdate", true);
           }
         }
       });
@@ -146,6 +195,87 @@ export default {
 
     handleCurrentChange: function (currentPage) {
       this.currentPage = currentPage;
+    },
+
+    ifUpdateState: function (row, column, cell, event) {
+      if (row.ifUpdate == true) {
+        if (row.state == "FINISH") {
+          this.$message({
+            message: "报名已结束，无法更改",
+            type: "info",
+          });
+        } else {
+          if (column.property == undefined) {
+            this.$message({
+              message: "确认改变报名状态",
+              type: "info",
+            });
+            row.ifUpdate = false;
+            this.state = row.state;
+          } else {
+            this.$message({
+              message: "只能改变报名状态",
+              type: "warning",
+            });
+          }
+        }
+      }
+    },
+
+    updateState: function (row) {
+      console.log(row);
+      var that = this;
+      row.ifUpdate = true;
+      if (row.state == this.state) {
+        that.$message({
+          message: "未进行更改，取消编辑",
+          type: "info",
+        });
+      } else {
+        axios({
+          headers: { Authorization: this.print.Authorization },
+          method: "put",
+          url: "http://kana.chat:70/examEntry",
+          params: {
+            examEntryId: row.examEntryId,
+            examDetailId: row.examDetailId,
+            term: row.term,
+            contact: row.contact,
+            state: this.state,
+          },
+        }).then(
+          function (reponse) {
+            that.$message({
+              message: "更改成功",
+              type: "success",
+            });
+            that.reload();
+          },
+          function (err) {
+            that.$message.error("更改失败");
+          }
+        );
+      }
+    },
+
+    deleteRegistrationRelease: function (row) {
+      var that = this;
+      axios({
+        headers: { Authorization: this.print.Authorization },
+        method: "delete",
+        url: "http://kana.chat:70/examEntry?examEntryId=" + row.examEntryId,
+      }).then(
+        function (reponse) {
+          that.$message({
+            message: "删除成功",
+            type: "success",
+          });
+          that.reload();
+        },
+        function (err) {
+          that.$message.error("删除失败");
+        }
+      );
     },
   },
 };

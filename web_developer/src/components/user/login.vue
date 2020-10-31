@@ -37,8 +37,12 @@
               考试报名
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">报名中心</a>
-              <router-link class="dropdown-item" to="/publicGetTest">考试频道</router-link>
+              <router-link class="dropdown-item" to="/publicGetExam"
+                >报名中心</router-link
+              >
+              <router-link class="dropdown-item" to="/publicGetTest"
+                >考试频道</router-link
+              >
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
@@ -48,41 +52,112 @@
     </nav>
 
     <div class="container">
-      <form action="">
+      <el-form
+        :model="loginForm"
+        ref="loginForm"
+        class="demo-ruleForm"
+        :rules="rule"
+      >
         <div class="form-group">
-          <label for="username">用户名：</label>
-          <el-input type="text" v-model="username" placeholder="请输入用户名" />
+          <el-form-item prop="username"
+            >用户名
+            <el-input
+              type="text"
+              v-model="loginForm.username"
+              placeholder="请输入用户名"
+          /></el-form-item>
         </div>
         <div class="form-group">
-          <label for="password">密码：</label>
-          <el-input
-            type="password"
-            v-model="password"
-            placeholder="请输入密码"
-            @keyup.enter="visible = !visible"
-            show-password
-          />
+          <el-form-item prop="password"
+            >密码
+            <el-input
+              type="password"
+              v-model="loginForm.password"
+              placeholder="请输入密码"
+              @keyup.enter="visible = !visible"
+              show-password
+          /></el-form-item>
         </div>
-        <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" v-model="remember" />
-          <label class="form-check-label">记住我</label>
+        <div class="form-group">
+          <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
         </div>
         <br />
-        <input
-          type="button"
-          class="btn btn-primary"
-          value="登陆"
-          v-popover:popover
-          @click="visible = !visible"
-        />
-        <input
-          type="button"
-          class="btn btn-primary"
-          value="返回"
-          @click="returnHistory"
-        />
-      </form>
+        <div class="form-group">
+          <el-form-item>
+            <el-button
+              type="primary"
+              v-popover:popover
+              @click="visible = !visible"
+              >登陆</el-button
+            >
+            <el-button
+              class="btn btn-primary"
+              v-popover:popover
+              @click="returnHistory"
+              >返回</el-button
+            >
+            <el-button
+              type="warning"
+              v-popover:popover
+              @click="emailDialog = true"
+              >找回密码</el-button
+            >
+          </el-form-item>
+        </div>
+      </el-form>
     </div>
+
+    <el-dialog title="找回密码" :visible.sync="emailDialog" width="40%">
+      <el-form
+        :model="getPassForm"
+        ref="getPassForm"
+        :rules="rule"
+        label-width="70px"
+        :inline="true"
+      >
+        <el-form-item prop="email" label="邮箱">
+          <el-input
+            v-model="getPassForm.email"
+            placeholder="请输入账号注册邮箱"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="sendEmail('getPassForm')" :disabled="isDisabled">{{
+            buttonName
+          }}</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form
+        :model="getPassForm"
+        ref="getPassForm"
+        :rules="rule"
+        label-width="70px"
+        :inline="true"
+        v-if="ifGetCode"
+      >
+        <el-form-item label="验证码">
+          <el-input v-model="getPassForm.verifyCode"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="checkVerifyCode">验证邮箱</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form
+        :model="getPassForm"
+        ref="getPassForm"
+        :rules="rule"
+        label-width="70px"
+        :inline="true"
+        v-if="ifRightCode"
+      >
+        <el-form-item prop="password" label="密码">
+          <el-input v-model="getPassForm.password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="updatePassword('getPassForm')">修改密码</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
 
     <!--验证码弹窗-->
     <el-popover
@@ -124,10 +199,44 @@ export default {
   name: "login",
   data() {
     return {
-      username: "",
-      password: "",
-      remember: false,
+      loginForm: {
+        username: "",
+        password: "",
+        rememberMe: false,
+      },
       authorization: "",
+      //找回密码dialog
+      emailDialog: false,
+      //找回密码表
+      getPassForm: {
+        email: "",
+        verifyCode: "",
+        passoword: "",
+      },
+      //60S重发验证码按钮参数
+      buttonName: "发送验证码",
+      isDisabled: false,
+      time: 60,
+      ifGetCode: false,
+      ifRightCode: false,
+
+      rule: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 20, message: "请输入6到20位密码", trigger: "blur" },
+        ],
+        email: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"],
+          },
+        ],
+      },
 
       tips: "拖动左边滑块完成上方拼图",
       rules: {},
@@ -155,39 +264,116 @@ export default {
     },
 
     login: function () {
+      this.$refs["loginForm"].validate((valid) => {
+        if (valid) {
+          var that = this;
+          axios.post("http://kana.chat:70/auth/login", this.loginForm).then(
+            function (reponse) {
+              that.authorization = reponse.headers.authorization;
+              //存到vuex store
+              that.$store.commit("print/setPrint", {
+                Authorization: that.authorization,
+                username: that.loginForm.username,
+              });
+              that.$message({
+                message: "登陆成功",
+                type: "success",
+              });
+              that.$router.push({
+                name: "homepage",
+              });
+            },
+            function (err) {
+              that.$message.error("登陆失败");
+            }
+          );
+        } else {
+          return false;
+        }
+      });
+    },
+
+    sendEmail(formName) {
+      this.$refs[formName].validate((valid) => {
+        var that = this;
+        axios
+          .post(
+            "http://kana.chat:70/users/email?email=" + this.getPassForm.email
+          )
+          .then(
+            function (reponse) {
+              that.ifGetCode = true;
+            },
+            function (err) {
+              that.$message.error("查无此账号邮箱");
+            }
+          );
+
+        //60S后重发验证码
+        if (valid) {
+          let that = this;
+          that.isDisabled = true;
+          let interval = window.setInterval(function () {
+            that.buttonName = "（" + that.time + "秒）后重新发送";
+            --that.time;
+            if (that.time < 0) {
+              that.buttonName = "重新发送";
+              that.time = 10;
+              that.isDisabled = false;
+              window.clearInterval(interval);
+            }
+          }, 1000);
+        } else {
+          return false;
+        }
+      });
+    },
+
+    checkVerifyCode: function () {
       var that = this;
-      if (this.username == "" || this.password == "") {
-        this.$message({
-          message: "用户名或密码未输入",
-          type: "warning",
-        });
-      } else {
-        let login_data = {
-          username: this.username,
-          password: this.password,
-          rememberMe: this.remember,
-        };
-        axios.post("http://kana.chat:70/auth/login", login_data).then(
+      axios
+        .get("http://kana.chat:70/users/email?email=" + this.getPassForm.email)
+        .then(
           function (reponse) {
-            that.authorization = reponse.headers.authorization;
-            //存到vuex store
-            that.$store.commit("print/setPrint", {
-              Authorization: that.authorization,
-              username: that.username,
-            });
+            //console.log(reponse.data.data);
+            if (that.getPassForm.verifyCode == reponse.data.data) {
+              that.ifRightCode = true;
+            } else {
+              that.emailDialog = false;
+              that.$message.error("验证码错误！");
+            }
+          },
+          function (err) {
+            that.$message.error("获取指定邮箱验证码失败");
+          }
+        );
+    },
+
+    updatePassword: function (formName) {
+      this.$refs[formName].validate((valid) => {
+        var that = this;
+        axios({
+          method: "put",
+          url: "http://kana.chat:70/users/email",
+          params: {
+            email: this.getPassForm.email,
+            verifyCode: this.getPassForm.verifyCode,
+            password: this.getPassForm.password,
+          },
+        }).then(
+          function (reponse) {
+            that.emailDialog = false;
             that.$message({
-              message: "登陆成功",
+              message: "请记住新密码重新登陆",
               type: "success",
-            });
-            that.$router.push({
-              name: "homepage",
             });
           },
           function (err) {
-            that.$message.error("登陆失败");
+            that.emailDialog = false;
+            that.$message.error("更改密码失败");
           }
         );
-      }
+      });
     },
 
     //拼图验证码初始化
