@@ -33,6 +33,33 @@ public class ExamLocationController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.findExamLocation(request,pageNum,pageSize));
     }
 
+    @GetMapping("/user")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<List<ExamLocationBO>> getExamLocationByUser(ExamLocationRequest request , HttpServletRequest httpServletRequest){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.findByUserId(request));
+    }
+
+    @GetMapping("/examDetail")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<List<ExamLocationBO>> getExamLocationByExamDetail(ExamLocationRequest request , HttpServletRequest httpServletRequest){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.findByExamDetailId(request));
+    }
+
+    @GetMapping("/userEntry")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamLocationBO> getExamLocationByUserEntry(ExamLocationRequest request , HttpServletRequest httpServletRequest){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.findByUserExamEntryId(request));
+    }
+
+    @GetMapping("/single")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamLocationBO> getSingleExamLocation(ExamLocationRequest request , HttpServletRequest httpServletRequest){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.findByExamLocationId(request));
+    }
     @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
@@ -70,6 +97,13 @@ public class ExamLocationController {
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ExamLocationBO>> deleteExamLocationByUserId(String userId, HttpServletRequest httpServletRequest){
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.deleteByUserId(userId));
+    }
+
+    @DeleteMapping("/userEntry")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<ExamLocationBO> deleteExamLocationByUserEntry(String userEntryId, HttpServletRequest httpServletRequest){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examLocationService.deleteByUserExamEntryId(userEntryId));
     }
 
 }

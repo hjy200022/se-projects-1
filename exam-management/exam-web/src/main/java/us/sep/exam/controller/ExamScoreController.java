@@ -37,6 +37,7 @@ public class ExamScoreController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<ExamScoreBO> getExamScoreByExamScoreId(String examScoreId, HttpServletRequest httpServletRequest){
+        AssertUtil.assertStringNotBlank(examScoreId,"考试分数id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.findByExamScoreId(examScoreId));
     }
 
@@ -44,6 +45,7 @@ public class ExamScoreController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ExamScoreBO>> getExamScoreByUserId(String userId , HttpServletRequest httpServletRequest){
+        AssertUtil.assertStringNotBlank(userId,"用户id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.findByUserId(userId));
     }
 
@@ -51,6 +53,7 @@ public class ExamScoreController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<List<ExamScoreBO>> getExamScoreByExamDetailId(String examDetailId , HttpServletRequest httpServletRequest){
+        AssertUtil.assertStringNotBlank(examDetailId,"考试id不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examScoreService.findByExamDetailId(examDetailId));
     }
 

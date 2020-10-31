@@ -13,6 +13,8 @@ public interface ExamEntryService {
 
     ExamEntryBO getExamEntryByExamDetail(String examDetailId);
 
+    List<ExamEntryBO> getExamEntries(int pageNum , int pageSize);
+
     List<ExamEntryBO> getExamEntryByTerm(String term);
 
     ExamEntryBO modifyExamEntry(ExamEntryRequest request);

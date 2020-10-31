@@ -114,6 +114,7 @@ public class ExamScoreServiceImpl implements ExamScoreService {
     public void deleteByExamDetailId(String examDetailId) {
        if (examScoreRepo.existsByExamDetailId(examDetailId))
            examScoreRepo.deleteByExamDetailId(examDetailId);
+        throw new CustomizeException(CommonResultCode.UNFOUNDED,"未找到删除信息");
     }
 
     @Override
@@ -121,6 +122,7 @@ public class ExamScoreServiceImpl implements ExamScoreService {
     public void deleteByExamScoreId(String examScoreId) {
         if (examScoreRepo.existsByExamScoreId(examScoreId))
             examScoreRepo.existsByExamScoreId(examScoreId);
+        throw new CustomizeException(CommonResultCode.UNFOUNDED,"未找到删除信息");
     }
 
     @Override
@@ -128,6 +130,7 @@ public class ExamScoreServiceImpl implements ExamScoreService {
     public void deleteByUserId(String userId) {
         if (examScoreRepo.existsByUserId(userId))
             examScoreRepo.deleteByUserId(userId);
+        throw new CustomizeException(CommonResultCode.UNFOUNDED,"未找到删除信息");
     }
 
     @Override

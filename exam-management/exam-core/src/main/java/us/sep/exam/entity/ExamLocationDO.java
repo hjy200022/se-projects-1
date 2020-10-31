@@ -24,6 +24,10 @@ public class ExamLocationDO extends AbstractAuditBase {
     @Column(nullable = false , length = 32, updatable = false)
     private String examDetailId;
 
+    //用户报名id
+    @Column(nullable = false , length = 32)
+    private String userExamEntryId;
+
     //考试座位id
     @Column(nullable = false , length = 32, updatable = false)
     private String examLocationId;
@@ -42,7 +46,7 @@ public class ExamLocationDO extends AbstractAuditBase {
 
 
     public ExamLocationBO ToExamLocationBO(){
-        return ExamLocationBO.builder().examLocationId(examLocationId).examDetailId(examDetailId)
+        return ExamLocationBO.builder().examLocationId(examLocationId).examDetailId(examDetailId).userExamEntryId(userExamEntryId)
                 .location(location).userId(userId).teacher(teacher).build();
     }
 

@@ -9,9 +9,13 @@ import java.util.List;
 public interface ExamLocationService {
 
 
+
+
     List<ExamLocationBO> findExamLocation(ExamLocationRequest request, int pageNum, int pageSize);
 
     List<ExamLocationBO> findByExamDetailId(ExamLocationRequest request);
+
+    ExamLocationBO findByUserExamEntryId(ExamLocationRequest request);
 
     ExamLocationBO findByExamLocationId(ExamLocationRequest request);
 
@@ -20,6 +24,8 @@ public interface ExamLocationService {
     ExamLocationBO createExamLocation(ExamLocationRequest request);
 
     ExamLocationBO modifyExamLocation(ExamLocationRequest request);
+
+    ExamLocationBO deleteByUserExamEntryId(String userExamEntryId);
 
     ExamLocationBO deleteByExamLocationId(String examLocationId);
 

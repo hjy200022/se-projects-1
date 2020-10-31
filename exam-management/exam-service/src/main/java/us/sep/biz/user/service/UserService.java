@@ -118,7 +118,15 @@ public class UserService {
     public User find(String userName) {
         return userRepo.findByUserName(userName).orElseThrow(() -> new UserNameNotFoundException(ImmutableMap.of(USERNAME, userName)));
     }
-
+    @Transactional(rollbackFor = Exception.class)
+    public void modifyPasswordByEmail(String email , String password){
+       Optional<User> optional =  userRepo.findByEmail(email);
+       if (!optional.isPresent())
+           throw new CustomizeException(CommonResultCode.UNFOUNDED,"该用户不存在");
+       User user = optional.get();
+       user.setPassword(bCryptPasswordEncoder.encode(password));
+        userRepo.save(user);
+    }
     @Transactional(rollbackFor = Exception.class)
     public void update(UserUpdateRequest userUpdateRequest) {
         User user = find(userUpdateRequest.getUserName());
@@ -187,5 +195,6 @@ public class UserService {
             throw new UserNameAlreadyExistException(ImmutableMap.of(USERNAME, userName));
         }
     }
+
 
 }

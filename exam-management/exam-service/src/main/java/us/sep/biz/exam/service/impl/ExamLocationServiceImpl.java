@@ -14,6 +14,7 @@ import us.sep.exam.builder.ExamLocationBO;
 import us.sep.exam.entity.ExamLocationDO;
 import us.sep.exam.repo.ExamDetailRepo;
 import us.sep.exam.repo.ExamLocationRepo;
+import us.sep.exam.repo.UserExamEntryRepo;
 import us.sep.user.repo.UserInfoRepo;
 import us.sep.user.repo.UserRepo;
 import us.sep.util.enums.CommonResultCode;
@@ -28,10 +29,13 @@ import java.util.stream.Collectors;
 public class ExamLocationServiceImpl implements ExamLocationService {
 
     @Resource
-    private  ExamLocationRepo examLocationRepo;
+    private ExamLocationRepo examLocationRepo;
 
     @Resource
-    private  ExamDetailRepo examDetailRepo;
+    private ExamDetailRepo examDetailRepo;
+
+    @Resource
+    private UserExamEntryRepo userExamEntryRepo;
 
     @Resource
     private UserRepo userRepo;
@@ -56,6 +60,9 @@ public class ExamLocationServiceImpl implements ExamLocationService {
         if (!StringUtils.isEmpty(request.getExamDetailId()))
             examLocationDO.setExamDetailId(request.getExamDetailId());
 
+        if (!StringUtils.isEmpty(request.getUserExamEntryId()))
+            examLocationDO.setUserExamEntryId(request.getUserExamEntryId());
+
         if (!StringUtils.isEmpty(request.getUserId()))
             examLocationDO.setUserId(request.getUserId());
 
@@ -68,6 +75,7 @@ public class ExamLocationServiceImpl implements ExamLocationService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("examLocationId")
                 .withMatcher("examDetailId" ,ExampleMatcher.GenericPropertyMatchers.startsWith())
+                .withMatcher("userExamEntryId" ,ExampleMatcher.GenericPropertyMatchers.startsWith())
                 .withMatcher("userId" ,ExampleMatcher.GenericPropertyMatchers.startsWith())
                 .withMatcher("location" ,ExampleMatcher.GenericPropertyMatchers.contains())
                 .withMatcher("teacher",ExampleMatcher.GenericPropertyMatchers.startsWith());
@@ -86,6 +94,13 @@ public class ExamLocationServiceImpl implements ExamLocationService {
 
         return examLocationRepo.findByExamDetailId(request.getExamDetailId()).stream()
                 .map(ExamLocationDO::ToExamLocationBO).collect(Collectors.toList());
+    }
+
+    @Override
+    public ExamLocationBO findByUserExamEntryId(ExamLocationRequest request) {
+        if (!userExamEntryRepo.existsByUserExamEntryId(request.getUserExamEntryId()))
+            throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户报名id");
+        return examLocationRepo.findByUserExamEntryId(request.getUserExamEntryId()).get().ToExamLocationBO();
     }
 
     @Override
@@ -109,6 +124,9 @@ public class ExamLocationServiceImpl implements ExamLocationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExamLocationBO createExamLocation(ExamLocationRequest request) {
+
+        if (!userExamEntryRepo.existsByUserExamEntryId(request.getUserExamEntryId()))
+            throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户报名id");
 
         if (!examDetailRepo.existsByExamDetailId(request.getExamDetailId()) )
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该次考试");
@@ -143,6 +161,15 @@ public class ExamLocationServiceImpl implements ExamLocationService {
 
         examLocationRepo.save(examLocationDO);
         return examLocationDO.ToExamLocationBO();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ExamLocationBO deleteByUserExamEntryId(String userExamEntryId) {
+        if (!userExamEntryRepo.existsByUserExamEntryId(userExamEntryId))
+            throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户报名id");
+
+        return examLocationRepo.deleteByUserExamEntryId(userExamEntryId).ToExamLocationBO();
     }
 
     @Override

@@ -19,6 +19,9 @@ public class ExamLocationRequest {
     //考试座位id
     private String examLocationId;
 
+    //用户报名id
+    private String userExamEntryId;
+
     //考试座位号 1 - 60
     @NotBlank
     private String location;

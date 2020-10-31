@@ -1,11 +1,13 @@
 package us.sep.biz.exam.service.impl;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import us.sep.base.idfactory.BizIdFactory;
 import us.sep.biz.exam.enums.ExamEntryEnum;
+import us.sep.biz.exam.enums.ExamTermEnum;
 import us.sep.biz.exam.request.ExamEntryRequest;
 import us.sep.biz.exam.service.ExamEntryService;
 import us.sep.exam.builder.ExamEntryBO;
@@ -14,8 +16,10 @@ import us.sep.exam.repo.ExamDetailRepo;
 import us.sep.exam.repo.ExamEntryRepo;
 import us.sep.util.enums.CommonResultCode;
 import us.sep.util.exceptions.CustomizeException;
+import us.sep.util.utils.DateUtil;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,12 +39,18 @@ public class ExamEntryServiceImpl implements ExamEntryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExamEntryBO createExamEntry(ExamEntryRequest request) {
+
+        if (request.getTerm().equals(ExamTermEnum.FirstHalf.getTerm()) && request.getTerm().equals(ExamTermEnum.SecondHalf.getTerm()))
+            throw new CustomizeException(CommonResultCode.ILLEGAL_PARAMETERS,"学期参数不正确");
+
         if (!examDetailRepo.existsByExamDetailId(request.getExamDetailId()) )
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该次考试");
         ExamEntryDO examEntryDO = new ExamEntryDO();
         BeanUtils.copyProperties(request,examEntryDO);
-        examEntryDO.setState(ExamEntryEnum.Prepare.getState());
-        examEntryDO.setNote(ExamEntryEnum.Prepare.getName());
+        //拼接成 2020FH 这种格式
+        examEntryDO.setTerm(DateUtil.getYear(new Date()) + request.getTerm());
+        examEntryDO.setState(ExamEntryEnum.Start.getState());
+        examEntryDO.setNote(ExamEntryEnum.Start.getName());
         examEntryDO.setExamEntryId(bizIdFactory.getExamEntryId());
         examEntryRepo.save(examEntryDO);
         return examEntryDO.ToExamEntryBO();
@@ -60,6 +70,11 @@ public class ExamEntryServiceImpl implements ExamEntryService {
         if (!optional.isPresent())
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该考试");
         return optional.get().ToExamEntryBO();
+    }
+
+    @Override
+    public List<ExamEntryBO> getExamEntries(int pageNum, int pageSize) {
+        return examEntryRepo.findAll(PageRequest.of(pageNum,pageSize)).stream().map(ExamEntryDO::ToExamEntryBO).collect(Collectors.toList());
     }
 
     @Override

@@ -14,6 +14,8 @@ public interface ExamLocationRepo extends JpaRepository<ExamLocationDO,Long> {
 
     List<ExamLocationDO> findByExamDetailId(String examDetailId);
 
+    Optional<ExamLocationDO> findByUserExamEntryId(String userExamEntryId);
+
     Optional<ExamLocationDO> findByExamLocationId(String examLocationId);
 
     void deleteByUserId(String userId);
@@ -21,6 +23,8 @@ public interface ExamLocationRepo extends JpaRepository<ExamLocationDO,Long> {
     void deleteByExamDetailId(String examDetailId);
 
     ExamLocationDO deleteByExamLocationId(String examLocationId);
+
+    ExamLocationDO deleteByUserExamEntryId(String userExamEntryId);
 
     boolean existsByExamDetailId(String examDetailId);
 
