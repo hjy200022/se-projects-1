@@ -45,6 +45,10 @@ public class ExamEntryServiceImpl implements ExamEntryService {
 
         if (!examDetailRepo.existsByExamDetailId(request.getExamDetailId()) )
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该次考试");
+
+        if (examEntryRepo.existsByExamDetailId(request.getExamDetailId()) )
+            throw new CustomizeException(CommonResultCode.SYSTEM_ERROR,"该次考试报名已发布");
+
         ExamEntryDO examEntryDO = new ExamEntryDO();
         BeanUtils.copyProperties(request,examEntryDO);
         //拼接成 2020FH 这种格式
@@ -52,6 +56,7 @@ public class ExamEntryServiceImpl implements ExamEntryService {
         examEntryDO.setState(ExamEntryEnum.Start.getState());
         examEntryDO.setNote(ExamEntryEnum.Start.getName());
         examEntryDO.setExamEntryId(bizIdFactory.getExamEntryId());
+        examEntryDO.setVersion(0L);
         examEntryRepo.save(examEntryDO);
         return examEntryDO.ToExamEntryBO();
     }
@@ -125,18 +130,22 @@ public class ExamEntryServiceImpl implements ExamEntryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExamEntryBO deleteExamEntry(String examEntryId) {
-        if (examEntryRepo.existsByExamEntryId(examEntryId))
-        return examEntryRepo.deleteByExamEntryId(examEntryId).ToExamEntryBO();
-
-        return null;
+        if (examEntryRepo.existsByExamEntryId(examEntryId)) {
+            ExamEntryDO examEntryDO = examEntryRepo.findByExamEntryId(examEntryId).get();
+            examEntryRepo.deleteByExamEntryId(examEntryId);
+            return examEntryDO.ToExamEntryBO();
+        }
+        throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该报名消息");
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExamEntryBO deleteExamEntryByExamDetail(String examDetailId) {
-        if (examEntryRepo.existsByExamDetailId(examDetailId))
-        return examEntryRepo.deleteByExamDetailId(examDetailId).ToExamEntryBO();
-
-        return null;
+        if (examEntryRepo.existsByExamDetailId(examDetailId)) {
+            ExamEntryDO examEntryDO = examEntryRepo.findByExamDetailId(examDetailId).get();
+            examEntryRepo.deleteByExamDetailId(examDetailId);
+            return examEntryDO.ToExamEntryBO();
+        }
+        throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该报名消息");
     }
 }

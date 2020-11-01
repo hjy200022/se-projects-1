@@ -81,6 +81,7 @@ public class ExamEntryController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<ExamEntryBO> createExamEntry(@Valid ExamEntryRequest request , HttpServletRequest httpServletRequest){
+        AssertUtil.assertNotNull(request.getNumber(),"报名人数限额不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),examEntryService.createExamEntry(request));
     }
 

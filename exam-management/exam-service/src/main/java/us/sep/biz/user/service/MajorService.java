@@ -1,6 +1,7 @@
 package us.sep.biz.user.service;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import us.sep.biz.user.request.MajorRequest;
@@ -29,6 +30,10 @@ public class MajorService {
         BeanUtils.copyProperties(request,major);
         majorRepo.save(major);
         return major.ToMajorBO();
+    }
+
+    public List<MajorBO> findMajors(int pageNum , int pageSize){
+        return majorRepo.findAll(PageRequest.of(pageNum,pageSize)).stream().map(MajorDO::ToMajorBO).collect(Collectors.toList());
     }
 
 
@@ -85,8 +90,9 @@ public class MajorService {
     public MajorBO deleteByClassName(String className){
         if (!majorRepo.existsByClassName(className))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"未找到该班级");
-
-        return  majorRepo.deleteByClassName(className).ToMajorBO();
+        MajorBO major = majorRepo.findByClassName(className).get().ToMajorBO();
+        majorRepo.deleteByClassName(className);
+        return  major;
     }
 
 }

@@ -49,6 +49,10 @@ public class ExamEntryBO{
      */
     private String note;
 
+    /**
+     * 版本号
+     */
+    private Long version;
 
 
 }

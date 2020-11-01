@@ -16,7 +16,7 @@ public interface MajorRepo extends JpaRepository<MajorDO, Long> {
 
     void deleteByMajor(String major);
 
-    MajorDO deleteByClassName(String className);
+    void deleteByClassName(String className);
 
     boolean existsByClassName(String className);
 

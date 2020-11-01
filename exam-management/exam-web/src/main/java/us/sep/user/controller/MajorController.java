@@ -10,6 +10,7 @@ import us.sep.user.builder.MajorBO;
 import us.sep.util.common.Result;
 import us.sep.util.enums.CommonResultCode;
 import us.sep.util.log.Log;
+import us.sep.util.utils.AssertUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,17 +29,29 @@ public class MajorController {
     @Resource
     MajorService majorService;
 
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<List<MajorBO>> getMajor( @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+                                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize ,HttpServletRequest httpServletRequest){
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.findMajors(pageNum,pageSize));
+    }
+
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<List<MajorBO>> getMajor(String majorName, HttpServletRequest httpServletRequest){
-        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.findMajorByName(majorName));
+    public Result<List<MajorBO>> getMajor(String major, HttpServletRequest httpServletRequest){
+        AssertUtil.assertNotNull(major,"专业大类不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.findMajorByName(major));
     }
 
     @GetMapping("/class")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
     public Result<MajorBO> getMajorByClass(String className, HttpServletRequest httpServletRequest){
+        AssertUtil.assertNotNull(className,"班级不能为空");
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), majorService.findMajorByClass(className));
     }
 

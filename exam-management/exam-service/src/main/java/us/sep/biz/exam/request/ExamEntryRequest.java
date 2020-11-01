@@ -41,7 +41,6 @@ public class ExamEntryRequest {
     /**
      * 报名人数限额
      */
-    @NotBlank
     private Integer number;
 
     /**

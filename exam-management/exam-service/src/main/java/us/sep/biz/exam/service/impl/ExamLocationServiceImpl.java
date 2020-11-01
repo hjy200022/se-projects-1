@@ -169,7 +169,9 @@ public class ExamLocationServiceImpl implements ExamLocationService {
         if (!userExamEntryRepo.existsByUserExamEntryId(userExamEntryId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该用户报名id");
 
-        return examLocationRepo.deleteByUserExamEntryId(userExamEntryId).ToExamLocationBO();
+        ExamLocationBO examLocationBO = examLocationRepo.findByUserExamEntryId(userExamEntryId).get().ToExamLocationBO();
+        examLocationRepo.deleteByUserExamEntryId(userExamEntryId);
+        return examLocationBO;
     }
 
     @Override
@@ -178,7 +180,9 @@ public class ExamLocationServiceImpl implements ExamLocationService {
         if (!examLocationRepo.existsByExamLocationId(examLocationId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该考试座位号id");
 
-        return examLocationRepo.deleteByExamLocationId(examLocationId).ToExamLocationBO();
+        ExamLocationBO examLocationBO = examLocationRepo.findByExamLocationId(examLocationId).get().ToExamLocationBO();
+        examLocationRepo.deleteByExamLocationId(examLocationId);
+        return examLocationBO;
     }
 
     @Override

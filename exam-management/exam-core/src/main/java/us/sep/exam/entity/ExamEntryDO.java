@@ -72,9 +72,15 @@ public class ExamEntryDO extends AbstractAuditBase {
     @Column(nullable = false , length = 32)
     private String note;
 
+    /**
+     * 版本号
+     */
+    @Column
+    private Long version;
+
     public ExamEntryBO ToExamEntryBO(){
        return ExamEntryBO.builder().examEntryId(examEntryId).examDetailId(examDetailId).term(term)
-                .state(state).number(number).contact(contact).note(note).build();
+                .state(state).number(number).contact(contact).note(note).version(version).build();
     }
 
 }

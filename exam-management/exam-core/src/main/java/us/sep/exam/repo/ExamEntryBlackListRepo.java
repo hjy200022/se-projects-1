@@ -20,12 +20,12 @@ public interface ExamEntryBlackListRepo extends JpaRepository<ExamEntryBlackList
 
     List<ExamEntryBlackListDO> findByTerm(String term);
 
-    ExamEntryBlackListDO deleteByExamEntryId(String examEntryId);
+    void deleteByExamEntryId(String examEntryId);
 
-    ExamEntryBlackListDO deleteByExamDetailId(String examDetailId);
+    void deleteByExamDetailId(String examDetailId);
 
-    ExamEntryBlackListDO deleteByExamBlacklistId(String blacklistId);
+    void deleteByExamBlacklistId(String blacklistId);
 
-    ExamEntryBlackListDO deleteByUserId(String userId);
+    void deleteByUserId(String userId);
 
 }

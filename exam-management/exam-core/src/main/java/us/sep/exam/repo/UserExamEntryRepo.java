@@ -20,7 +20,12 @@ public interface UserExamEntryRepo extends JpaRepository<UserExamEntryDO,Long> {
 
     boolean existsByUserId(String id);
 
+    boolean existsByUserIdAndExamEntryId(String userId , String examEntryId);
+
     void deleteByExamEntryId(String id);
 
     void deleteByUserId(String userId);
+
+    Long countByExamEntryId(String examEntryId);
+
 }

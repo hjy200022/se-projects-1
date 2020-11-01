@@ -14,8 +14,8 @@ public interface ExamEntryRecordRepo extends JpaRepository<ExamEntryRecordDO,Lon
 
     Optional<ExamEntryRecordDO> findByExamEntryId(String examEntryId);
 
-    ExamEntryRecordDO deleteByExamEntryRecordId(String id);
+    void deleteByExamEntryRecordId(String id);
 
-    ExamEntryRecordDO deleteByExamEntryId(String examEntryId);
+    void deleteByExamEntryId(String examEntryId);
 
 }

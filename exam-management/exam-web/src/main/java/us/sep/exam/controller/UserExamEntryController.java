@@ -71,12 +71,44 @@ public class UserExamEntryController {
         return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userExamEntryRecordService.getUserExamEntryRecordByUserId(userId));
     }
 
+    @GetMapping("/cache/remain")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<Long> getCacheRemainNumber(String examEntryId, HttpServletRequest httpServletRequest){
+        AssertUtil.assertStringNotBlank(examEntryId,"报名信息id不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userExamEntryService.getCacheRemain(examEntryId));
+    }
+
+
+    @GetMapping("/remain")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<Integer> getRemainNumber(String examEntryId, HttpServletRequest httpServletRequest){
+        AssertUtil.assertStringNotBlank(examEntryId,"报名信息id不能为空");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userExamEntryService.getDbRemain(examEntryId));
+    }
+
+    @AvoidRepeatableCommit
+    @PostMapping("/cache")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
+    @Log(loggerName = LoggerName.WEB_DIGEST)
+    public Result<UserExamEntryBO> createUserEntryByRedis(@Valid UserExamEntryRequest request, HttpServletRequest httpServletRequest){
+
+        UserExamEntryBO userExamEntry = userExamEntryService.createUserEntry(request);
+
+        AssertUtil.assertNotNull(userExamEntry,"报名人数已满");
+
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), userExamEntry);
+    }
+
     @AvoidRepeatableCommit
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_MANAGER','ROLE_ADMIN')")
     @Log(loggerName = LoggerName.WEB_DIGEST)
-    public Result<UserExamEntryBO> createUserEntryById(@Valid UserExamEntryRequest request, HttpServletRequest httpServletRequest){
-        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(),userExamEntryService.createUserEntry(request));
+    public Result<UserExamEntryBO> createUserEntryByCas(@Valid UserExamEntryRequest request, HttpServletRequest httpServletRequest){
+        UserExamEntryBO userExamEntry = userExamEntryService.createUserEntryCas(request);
+        AssertUtil.assertNotNull(userExamEntry,"报名人数已满");
+        return new Result<>(true, CommonResultCode.SUCCESS.getCode(), CommonResultCode.SUCCESS.getMessage(), userExamEntry);
     }
 
     @DeleteMapping

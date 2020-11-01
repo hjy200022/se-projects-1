@@ -18,7 +18,7 @@ public interface ExamRecordRepo extends JpaRepository<ExamRecordDO,Long> {
 
     boolean existsByExamTypeId(String id);
 
-    ExamRecordDO deleteByExamTypeId(String id);
+    void deleteByExamTypeId(String id);
 
-    ExamRecordDO deleteByExamRecordId(String id);
+    void deleteByExamRecordId(String id);
 }

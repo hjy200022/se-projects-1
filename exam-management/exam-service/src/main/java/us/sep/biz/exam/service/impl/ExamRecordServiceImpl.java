@@ -90,7 +90,9 @@ public class ExamRecordServiceImpl implements ExamRecordService {
         if (!examRecordRepo.existsByExamRecordId(examRecordId))
             throw new CustomizeException(CommonResultCode.UNFOUNDED,"不存在该归档信息id");
 
-        return examRecordRepo.deleteByExamRecordId(examRecordId).ToExamRecordBO();
+        ExamRecordBO examRecordBO =  examRecordRepo.findByExamRecordId(examRecordId).get().ToExamRecordBO();
+        examRecordRepo.deleteByExamRecordId(examRecordId);
+        return examRecordBO;
     }
 
     @Override

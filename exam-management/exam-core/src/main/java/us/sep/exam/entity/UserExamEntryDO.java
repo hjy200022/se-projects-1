@@ -41,6 +41,7 @@ public class UserExamEntryDO extends AbstractAuditBase {
     private String userId;
 
 
+
     public UserExamEntryBO ToUserExamEntryBO(){
         return UserExamEntryBO.builder().examEntryId(examEntryId).userExamEntryId(userExamEntryId).userId(userId).build();
     }

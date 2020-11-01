@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author kana-cr
@@ -22,7 +22,7 @@ public class UserExamEntryRequest {
     /**
      * 考试报名信息id
      */
-    @Valid
+    @NotBlank
     private String examEntryId;
 
 
@@ -34,7 +34,7 @@ public class UserExamEntryRequest {
     /**
      * 报名用户id
      */
-    @Valid
+    @NotBlank
     private String userId;
 
 

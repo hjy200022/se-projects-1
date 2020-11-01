@@ -15,6 +15,12 @@ public interface UserExamEntryService {
 
     UserExamEntryBO createUserEntry(UserExamEntryRequest request);
 
+    UserExamEntryBO createUserEntryCas(UserExamEntryRequest request);
+
+    Long getCacheRemain(String examEntryId);
+
+    int getDbRemain(String examEntryId);
+
     List<UserExamEntryBO> deleteUserEntryByExamEntry(String examEntryId);
 
     List<UserExamEntryBO> deleteUserEntryByUserId(String userId);
